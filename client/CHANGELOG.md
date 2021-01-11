@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0] - 2021-01-11
+
+- Migrated the package from `@fwl/oauth2`, and renamed it as `@fewlines/connect-client`.
+
 ## [0.1.8] - 2020-12-14
 
 - Moved all exported objects and functions to `src` to prevent import issues.

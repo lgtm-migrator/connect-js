@@ -5,11 +5,10 @@
   "description": "OAuth2 Client for the Connect JS SDK",
   "license": "MIT",
   "types": "dist/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fewlinesco/node-web-libraries/tree/master/packages/oauth2"
-  },
   "main": "dist/index.js",
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
@@ -52,9 +51,6 @@
       "@fewlines/eslint-config/typescript"
     ]
   },
-  "files": [
-    "dist/**/*"
-  ],
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
