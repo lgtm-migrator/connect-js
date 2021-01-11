@@ -1,14 +1,14 @@
-# FWL OAuth2
+# Fewlines Connect-js Client
 
 **Disclaimer**: this package is made for our internal usage and is only open source for convenience so we might not consider Pull Requests or Issues. Feel free to fork though.
 
-This is part of the Fewlines Web Libraries packages.
-It mainly provides an abstraction for the OAuth2 flow, and a secure way to verify JWT for HS256 and RS256 algorithms
+`Client` is part of the Fewlines Connect-js SDK.
+It mainly provides an abstraction for the OAuth2 flow, and a secure way to verify JWT for HS256 and RS256 algorithms (signed and/or encrypted).
 
 ## Installation
 
 ```shell
-yarn add @fwl/oauth2
+yarn add @fewlines/connect-client
 ```
 
 ## Getting Started
@@ -63,7 +63,7 @@ Returns a list containing the `access_token`, `refresh_token`, and `id_token` if
 
 ```typescript
 const tokens = await oauthClient.getTokensFromAuthorizationCode(
-  "authorization_code",
+  "authorization_code"
 );
 ```
 
@@ -97,7 +97,7 @@ const decrypted = oauthClient.decryptJWE<string>(JWE, privateKey, true);
 const decrypted = oauthClient.decryptJWE<{ [key: string]: string }>(
   JWE,
   privateKey,
-  false,
+  false
 );
 ```
 
