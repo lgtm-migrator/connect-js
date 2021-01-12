@@ -23,7 +23,7 @@ You first need to initialize the client instance, called `OAuth2Client`. This cl
 - `scopes`: It represents the kind of information and actions that an Application is able to access on another Application. Every scope has to be authorized by the User during sign in operation.
 
 ```typescript
-import OAuth2Client, { OAuth2ClientConstructor } from "@fwl/oauth2";
+import OAuth2Client, { OAuth2ClientConstructor } from "@fewlines/connect-client";
 
 const oauthClientConstructorProps: OAuth2ClientConstructor = {
   openIDConfigurationURL: "***",
@@ -103,12 +103,12 @@ const decrypted = oauthClient.decryptJWE<{ [key: string]: string }>(
 
 ## Utils
 
-`@fwl/oauth2` also provides utils functions and default objects that we are using in the package flow.
+`@fewlines/connect-client` also provides utils functions and default objects that we are using in the package flow.
 
 ### generateHS256JWS
 
 ```typescript
-import { generateHS256JWS } from "@fwl/oauth2"
+import { generateHS256JWS } from "@fewlines/connect-client"
 
 generateHS256JWS(customPayload?: CustomPayload, secret?: string): string {};
 ```
@@ -120,7 +120,7 @@ You can give a custom **secret** for signature, and/or a custom payload to custo
 ### generateRS256JWS
 
 ```typescript
-import { generateRS256JWS } from "@fwl/oauth2"
+import { generateRS256JWS } from "@fewlines/connect-client"
 
 generateRS256JWS(customPayload?: CustomPayload, secret?: string): string {};
 ```
@@ -195,7 +195,7 @@ import {
   defaultAsymmetricAlgoKeyPair,
   defaultPayload,
   defaultSecret,
-} from "@fwl/oauth2";
+} from "@fewlines/connect-client";
 ```
 
 ### decodeJWTPart
@@ -203,7 +203,7 @@ import {
 Takes a part from a JWT (e.g. the JWA, or the payload), and decode it.
 
 ```typescript
-import { decodeJWTPart } from "@fwl/oauth2";
+import { decodeJWTPart } from "@fewlines/connect-client";
 
 const [JWA, payload] = JWT.split(".");
 
@@ -216,7 +216,7 @@ const decodedPayload = decodeJWTPart(payload);
 Takes a modulus and an exponent (found in the `JWKS`), and recreate a public key.
 
 ```typescript
-import { rsaPublicKeyToPEM } from "@fwl/oauth2";
+import { rsaPublicKeyToPEM } from "@fewlines/connect-client";
 
 const key = {
   e: "AQAB",
