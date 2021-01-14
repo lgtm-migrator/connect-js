@@ -1,8 +1,8 @@
 {
-  "name": "@fewlines/connect-client",
-  "version": "0.2.0",
+  "name": "@fewlines/connect-management",
+  "version": "0.0.0-experimental-25f06e5",
   "author": "Fewlines",
-  "description": "OAuth2 Client for the Connect JS SDK",
+  "description": "Management flow for the Connect JS SDK",
   "license": "MIT",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
@@ -19,21 +19,20 @@
     "prepublishOnly": "yarn lint",
     "experimental-publish": "yarn publish --new-version \"0.0.0-experimental-$(git rev-parse --short HEAD)\" --access public --tag experimental",
     "preversion": "yarn lint",
-    "test": "jest",
-    "experimental-publish": "yarn publish --new-version \"0.0.0-experimental-$(git rev-parse --short HEAD)\" --access public --tag experimental"
+    "test": "jest"
   },
   "dependencies": {
-    "jsonwebtoken": "8.5.1",
-    "node-fetch": "2.6.1",
-    "node-jose": "2.0.0"
+    "apollo-link": "1.2.14",
+    "apollo-link-context": "1.0.20",
+    "apollo-link-http": "1.5.17",
+    "cross-fetch": "3.0.6",
+    "graphql": "15.4.0",
+    "graphql-tag": "2.11.0"
   },
   "devDependencies": {
     "@fewlines/eslint-config": "3.0.0",
-    "@types/jest": "26.0.19",
-    "@types/jsonwebtoken": "8.5.0",
+    "@types/jest": "26.0.20",
     "@types/node": "14.14.14",
-    "@types/node-fetch": "2.5.7",
-    "@types/node-jose": "1.1.5",
     "@typescript-eslint/eslint-plugin": "4.11.0",
     "@typescript-eslint/parser": "4.11.0",
     "eslint": "7.16.0",
@@ -41,7 +40,6 @@
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-prettier": "3.3.0",
     "jest": "26.6.3",
-    "jest-fetch-mock": "3.0.3",
     "prettier": "2.2.1",
     "ts-jest": "26.4.4",
     "ts-node": "9.1.1",
