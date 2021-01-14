@@ -23,7 +23,9 @@ You first need to initialize the client instance, called `OAuth2Client`. This cl
 - `scopes`: It represents the kind of information and actions that an Application is able to access on another Application. Every scope has to be authorized by the User during sign in operation.
 
 ```typescript
-import OAuth2Client, { OAuth2ClientConstructor } from "@fewlines/connect-client";
+import OAuth2Client, {
+  OAuth2ClientConstructor,
+} from "@fewlines/connect-client";
 
 const oauthClientConstructorProps: OAuth2ClientConstructor = {
   openIDConfigurationURL: "***",
@@ -98,6 +100,20 @@ const decrypted = oauthClient.decryptJWE<{ [key: string]: string }>(
   JWE,
   privateKey,
   false
+);
+```
+
+### refreshTokens
+
+```typescript
+async refreshTokens(refresh_token: string): Promise<{refresh_token: string, access_token: string}>
+```
+
+Returns a refreshed `access_token` along with a new `refresh_token`.
+
+```typescript
+const { refresh_token, access_token } = await oauthClient.refreshTokens(
+  "refresh_token",
 );
 ```
 

@@ -17,6 +17,7 @@ import {
   OAuth2Tokens,
   JWTPayload,
   CustomPayload,
+  RefreshTokenResponse,
 } from "./src/types";
 import { decodeJWTPart } from "./src/utils/decodeJWTPart";
 import {
@@ -28,7 +29,7 @@ import { generateHS256JWS, generateRS256JWS } from "./src/utils/generateJWS";
 import { rsaPublicKeyToPEM } from "./src/utils/rsaPublicKeyToPEM";
 
 class OAuth2Client {
-  readonly openIDConfigurationURL: string;
+  readonly providerURL: string;
   readonly clientID: string;
   readonly clientSecret: string;
   readonly redirectURI: string;
@@ -38,7 +39,7 @@ class OAuth2Client {
   openIDConfiguration?: OpenIDConfiguration;
 
   constructor({
-    openIDConfigurationURL,
+    providerURL,
     clientID,
     clientSecret,
     redirectURI,
@@ -46,7 +47,7 @@ class OAuth2Client {
     scopes,
     fetch,
   }: OAuth2ClientConstructor) {
-    this.openIDConfigurationURL = openIDConfigurationURL;
+    this.providerURL = providerURL;
     this.clientID = clientID;
     this.clientSecret = clientSecret;
     this.redirectURI = redirectURI;
@@ -59,7 +60,13 @@ class OAuth2Client {
     if (this.openIDConfiguration) {
       return Promise.resolve();
     } else {
-      await this.fetch(this.openIDConfigurationURL)
+      const route = ".well-known/openid-configuration";
+      const openIDConfigurationURL = new URL(
+        route,
+        this.providerURL,
+      ).toString();
+
+      await this.fetch(openIDConfigurationURL)
         .then((response) => response.json())
         .then((openIDConfiguration) => {
           this.openIDConfiguration = openIDConfiguration;
@@ -245,6 +252,29 @@ class OAuth2Client {
     } else {
       return JSON.parse(payload.toString()) as T;
     }
+  }
+
+  async refreshTokens(refresh_token: string): Promise<RefreshTokenResponse> {
+    await this.setOpenIDConfiguration();
+
+    const payload = {
+      client_id: this.clientID,
+      client_secret: this.clientSecret,
+      refresh_token,
+      grant_type: "refresh_token",
+      scope: this.scopes.join(" "),
+    };
+
+    const route = "oauth/token";
+    const absoluteURL = new URL(route, this.providerURL).toString();
+
+    return this.fetch(absoluteURL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    }).then((response) => response.json());
   }
 }
 

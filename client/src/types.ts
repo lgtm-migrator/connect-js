@@ -19,7 +19,7 @@ export type OpenIDConfiguration = {
 };
 
 export type OAuth2ClientConstructor = {
-  openIDConfigurationURL: string;
+  providerURL: string;
   clientID: string;
   clientSecret: string;
   redirectURI: string;
@@ -51,6 +51,11 @@ export type JWTPayload = {
   iss: string;
   scope: string;
   sub: string;
+};
+
+export type RefreshTokenResponse = {
+  refresh_token: string;
+  access_token: string;
 };
 
 export type CustomPayload = Record<string, unknown>;

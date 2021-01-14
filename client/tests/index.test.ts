@@ -25,7 +25,7 @@ describe("OAuth2Client", () => {
   });
 
   const oauthClientConstructorProps: OAuth2ClientConstructor = {
-    openIDConfigurationURL: "http://mocked-openid-url.test",
+    providerURL: "http://mocked-openid-url.test",
     clientID: "7dc44ab1-177a-459f-8be5-e485f16c8e87",
     clientSecret: defaultSecret,
     redirectURI: "http://mocked-redirect-url.test",

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2021-01-13
+
+- Added a function to refresh tokens (`refreshTokens`).
+
 ## [0.1.0] - 2021-01-11
 
 - Migrated the package from `@fwl/oauth2`, and renamed it as `@fewlines/connect-client`.
