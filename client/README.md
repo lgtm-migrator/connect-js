@@ -20,8 +20,9 @@ You first need to initialize the client instance, called `OAuth2Client`. This cl
 - `clientID`: Client ID of the online service (e.g. internet website, application) that uses the Provider Authentication and Authorization service for its User.
 - `clientSecret`: Paired with the client ID, used to authenticate the Application from which the User intent to sign in.
 - `redirectURI`: URI used to redirect to the original Application website after a successful login in on Connect.
-- `audience`: The audience of the Application (its name for Connect)..
+- `audience`: The audience of the Application (its name for Connect).
 - `scopes`: It represents the kind of information and actions that an Application is able to access on another Application. Every scope has to be authorized by the User during sign in operation.
+- `openIDConfiguration` (optional): Provides a way to initialize directly an openID configuration, without fetching the OpenID endpoint.
 
 ```typescript
 import OAuth2Client, {

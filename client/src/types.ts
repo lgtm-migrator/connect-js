@@ -26,6 +26,7 @@ export type OAuth2ClientConstructor = {
   audience: string;
   scopes: string[];
   fetch?: any;
+  openIDConfiguration?: OpenIDConfiguration;
 };
 
 export type JWKSDT = {

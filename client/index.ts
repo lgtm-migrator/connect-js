@@ -46,6 +46,7 @@ class OAuth2Client {
     audience,
     scopes,
     fetch,
+    openIDConfiguration,
   }: OAuth2ClientConstructor) {
     this.providerURL = providerURL;
     this.clientID = clientID;
@@ -54,6 +55,9 @@ class OAuth2Client {
     this.audience = audience;
     this.scopes = scopes;
     this.fetch = fetch ? fetch : nodeFetch;
+    this.openIDConfiguration = openIDConfiguration
+      ? openIDConfiguration
+      : undefined;
   }
 
   private async setOpenIDConfiguration(): Promise<void> {

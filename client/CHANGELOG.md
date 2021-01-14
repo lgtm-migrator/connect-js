@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.1] - 2021-01-14
+
+- Added an optional property (`openIDConfiguration`) to the `oauth2Client` constructor.
+
 ## [0.2.0] - 2021-01-13
 
 - Added a function to refresh tokens (`refreshTokens`).
