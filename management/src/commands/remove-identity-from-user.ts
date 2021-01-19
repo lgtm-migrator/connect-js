@@ -1,9 +1,16 @@
-import { FetchResult } from "apollo-link";
 import gql from "graphql-tag";
 
-import { Identity, IdentityCommandInput } from "../@types/identity";
-import { ManagementCredentials } from "../@types/management";
+import {
+  GraphqlErrors,
+  IdentityDeletionFailedError,
+  OutputDataNullError,
+} from "../errors";
 import { fetchManagement } from "../fetch-management";
+import {
+  Identity,
+  IdentityCommandInput,
+  ManagementCredentials,
+} from "../types";
 
 const REMOVE_IDENTITY_FROM_USER = gql`
   mutation removeIdentityFromUser(
@@ -14,33 +21,41 @@ const REMOVE_IDENTITY_FROM_USER = gql`
     removeIdentityFromUser(
       input: { userId: $userId, type: $type, value: $value }
     ) {
-      id
       identities {
-        id
-        primary
         value
-        type
-        status
       }
     }
   }
 `;
 
-export type RemoveIdentityFromUser = Promise<
-  FetchResult<{ removeIdentityFromUser: { id: string } & Identity[] }>
->;
-
 export async function removeIdentityFromUser(
   managementCredentials: ManagementCredentials,
   { userId, identityType, identityValue }: IdentityCommandInput,
-): RemoveIdentityFromUser {
+): Promise<boolean> {
   const operation = {
     query: REMOVE_IDENTITY_FROM_USER,
     variables: { userId, type: identityType, value: identityValue },
   };
 
-  return fetchManagement(
-    managementCredentials,
-    operation,
-  ) as RemoveIdentityFromUser;
+  const { data, errors } = await fetchManagement<{
+    removeIdentityFromUser: Identity[];
+  }>(managementCredentials, operation);
+
+  if (errors) {
+    throw new GraphqlErrors(errors);
+  }
+
+  if (!data.removeIdentityFromUser) {
+    throw new OutputDataNullError();
+  }
+
+  const isNotDeleted = data.removeIdentityFromUser.some(
+    ({ value }) => value === identityValue,
+  );
+
+  if (isNotDeleted) {
+    throw new IdentityDeletionFailedError();
+  }
+
+  return true;
 }

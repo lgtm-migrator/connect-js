@@ -1,8 +1,8 @@
-import { FetchResult } from "apollo-link";
 import gql from "graphql-tag";
 
-import { ManagementCredentials } from "../@types/management";
+import { GraphqlErrors, OutputDataNullError } from "../errors";
 import { fetchManagement } from "../fetch-management";
+import { ManagementCredentials } from "../types";
 
 const GET_PROVIDER_NAME_QUERY = gql`
   query getProviderName {
@@ -12,17 +12,25 @@ const GET_PROVIDER_NAME_QUERY = gql`
   }
 `;
 
-export type GetProviderName = Promise<
-  FetchResult<{ provider: { name: string } }>
->;
-
 export async function getProviderName(
   managementCredentials: ManagementCredentials,
-): GetProviderName {
+): Promise<string> {
   const operation = {
     query: GET_PROVIDER_NAME_QUERY,
     variables: {},
   };
 
-  return fetchManagement(managementCredentials, operation) as GetProviderName;
+  const { data, errors } = await fetchManagement<{
+    provider: { name: string };
+  }>(managementCredentials, operation);
+
+  if (errors) {
+    throw new GraphqlErrors(errors);
+  }
+
+  if (!data.provider) {
+    throw new OutputDataNullError();
+  }
+
+  return data.provider.name;
 }

@@ -1,16 +1,13 @@
-import { FetchResult } from "apollo-link";
 import gql from "graphql-tag";
 
-import { ManagementCredentials } from "../@types/management";
-import { SingleIdentityProviderUser } from "../@types/provider-user";
+import { GraphqlErrors, OutputDataNullError } from "../errors";
 import { fetchManagement } from "../fetch-management";
+import { Identity, ManagementCredentials } from "../types";
 
 const GET_USER_IDENTITY_QUERY = gql`
   query getUserIdentityQuery($userId: String!, $id: String!) {
     provider {
-      id
       user(filters: { userId: $userId }) {
-        id
         identity(filters: { id: $id }) {
           id
           primary
@@ -23,10 +20,6 @@ const GET_USER_IDENTITY_QUERY = gql`
   }
 `;
 
-export type GetIdentity = Promise<
-  FetchResult<{ provider: SingleIdentityProviderUser }>
->;
-
 export type GetIdentityInput = {
   userId: string;
   identityId: string;
@@ -35,11 +28,27 @@ export type GetIdentityInput = {
 export async function getIdentity(
   managementCredentials: ManagementCredentials,
   { userId, identityId }: GetIdentityInput,
-): GetIdentity {
+): Promise<Identity | null> {
   const operation = {
     query: GET_USER_IDENTITY_QUERY,
     variables: { userId, id: identityId },
   };
 
-  return fetchManagement(managementCredentials, operation) as GetIdentity;
+  const { data, errors } = await fetchManagement<{
+    provider: {
+      user: {
+        identity: Identity | null;
+      };
+    };
+  }>(managementCredentials, operation);
+
+  if (errors) {
+    throw new GraphqlErrors(errors);
+  }
+
+  if (!data.provider) {
+    throw new OutputDataNullError();
+  }
+
+  return data.provider.user.identity;
 }

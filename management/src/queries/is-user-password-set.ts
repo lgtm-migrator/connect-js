@@ -1,16 +1,13 @@
-import type { FetchResult } from "apollo-link";
 import gql from "graphql-tag";
 
-import { ManagementCredentials } from "../@types/management";
-import { ProviderUserPasswordSet } from "../@types/password";
+import { GraphqlErrors, OutputDataNullError } from "../errors";
 import { fetchManagement } from "../fetch-management";
+import { ManagementCredentials } from "../types";
 
 const IS_USER_PASSWORD_SET_QUERY = gql`
   query isUserPasswordSet($userId: String!) {
     provider {
-      id
       user(filters: { userId: $userId }) {
-        id
         passwords {
           available
         }
@@ -19,18 +16,32 @@ const IS_USER_PASSWORD_SET_QUERY = gql`
   }
 `;
 
-export type IsUserPasswordSet = Promise<
-  FetchResult<{ provider: ProviderUserPasswordSet }>
->;
-
 export async function isUserPasswordSet(
   managementCredentials: ManagementCredentials,
   userId: string,
-): IsUserPasswordSet {
+): Promise<boolean> {
   const operation = {
     query: IS_USER_PASSWORD_SET_QUERY,
     variables: { userId },
   };
 
-  return fetchManagement(managementCredentials, operation) as IsUserPasswordSet;
+  const { data, errors } = await fetchManagement<{
+    provider: {
+      user: {
+        passwords: {
+          available: boolean;
+        };
+      };
+    };
+  }>(managementCredentials, operation);
+
+  if (errors) {
+    throw new GraphqlErrors(errors);
+  }
+
+  if (!data.provider) {
+    throw new OutputDataNullError();
+  }
+
+  return data.provider.user.passwords.available;
 }

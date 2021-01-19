@@ -1,9 +1,10 @@
-import { FetchResult } from "apollo-link";
 import gql from "graphql-tag";
 
-import { ConnectApplication } from "../@types/connect-application";
-import { ManagementCredentials } from "../@types/management";
+import { GraphqlErrors, OutputDataNullError } from "../errors";
 import { fetchManagement } from "../fetch-management";
+import { getProviderApplication } from "../queries/get-provider-application";
+import { ProviderApplication, UpdateProviderApplicationInput } from "../types";
+import { ManagementCredentials } from "../types";
 
 const UPDATE_APPLICATION_MUTATION = gql`
   mutation updateApplication(
@@ -31,23 +32,48 @@ const UPDATE_APPLICATION_MUTATION = gql`
   }
 `;
 
-export type UpdateConnectApplication = Promise<
-  FetchResult<{
-    updateApplication: UpdateConnectApplication;
-  }>
->;
-
-export async function updateConnectApplication(
+export async function updateProviderApplication(
   managementCredentials: ManagementCredentials,
-  { id, name, description, defaultHomePage, redirectUris }: ConnectApplication,
-): UpdateConnectApplication {
-  const operation = {
-    query: UPDATE_APPLICATION_MUTATION,
-    variables: { id, name, description, defaultHomePage, redirectUris },
+  {
+    id,
+    name,
+    description,
+    defaultHomePage,
+    redirectUris,
+  }: UpdateProviderApplicationInput,
+): Promise<ProviderApplication> {
+  const currentData = await getProviderApplication(managementCredentials, id);
+
+  const updatedData = {
+    ...currentData,
+    name,
+    description,
+    defaultHomePage,
+    redirectUris,
   };
 
-  return fetchManagement(
-    managementCredentials,
-    operation,
-  ) as UpdateConnectApplication;
+  const operation = {
+    query: UPDATE_APPLICATION_MUTATION,
+    variables: {
+      id: updatedData.id,
+      name: updatedData.name,
+      description: updatedData.description,
+      defaultHomePage: updatedData.defaultHomePage,
+      redirectUris: updatedData.redirectUris,
+    },
+  };
+
+  const { data, errors } = await fetchManagement<{
+    updateApplication: ProviderApplication;
+  }>(managementCredentials, operation);
+
+  if (errors) {
+    throw new GraphqlErrors(errors);
+  }
+
+  if (!data.updateApplication) {
+    throw new OutputDataNullError();
+  }
+
+  return data.updateApplication;
 }

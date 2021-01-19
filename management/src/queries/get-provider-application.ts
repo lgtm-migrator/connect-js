@@ -3,32 +3,33 @@ import gql from "graphql-tag";
 import { GraphqlErrors, OutputDataNullError } from "../errors";
 import { fetchManagement } from "../fetch-management";
 import { ManagementCredentials } from "../types";
+import { ProviderApplication } from "../types";
 
-const GET_USER_ID_FROM_IDENTITY_VALUE_QUERY = gql`
-  query getUser($identities: IdentityInput!) {
+const GET_APPLICATION_QUERY = gql`
+  query getApplicationQuery($id: String!) {
     provider {
-      user(filters: { identities: $identities }) {
+      application(filters: { id: $id }) {
         id
+        defaultHomePage
+        redirectUris
+        name
+        description
       }
     }
   }
 `;
 
-export async function getUserIdFromIdentityValue(
+export async function getProviderApplication(
   managementCredentials: ManagementCredentials,
-  identityValue: string,
-): Promise<string> {
+  connectApplicationId: string,
+): Promise<ProviderApplication> {
   const operation = {
-    query: GET_USER_ID_FROM_IDENTITY_VALUE_QUERY,
-    variables: { value: identityValue },
+    query: GET_APPLICATION_QUERY,
+    variables: { id: connectApplicationId },
   };
 
   const { data, errors } = await fetchManagement<{
-    provider: {
-      user: {
-        id: string;
-      };
-    };
+    provider: { application: ProviderApplication };
   }>(managementCredentials, operation);
 
   if (errors) {
@@ -39,5 +40,5 @@ export async function getUserIdFromIdentityValue(
     throw new OutputDataNullError();
   }
 
-  return data.provider.user.id;
+  return data.provider.application;
 }

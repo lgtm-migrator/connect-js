@@ -1,9 +1,8 @@
-import type { FetchResult } from "apollo-link";
 import gql from "graphql-tag";
 
-import { ManagementCredentials } from "../@types/management";
-import { User } from "../@types/provider-user";
+import { GraphqlErrors, OutputDataNullError } from "../errors";
 import { fetchManagement } from "../fetch-management";
+import { CreateOrUpdatePasswordInput, ManagementCredentials } from "../types";
 
 const CREATE_OR_UPDATE_PASSWORD_MUTATION = gql`
   mutation createOrUpdatePassword($cleartextPassword: String!, $userId: ID!) {
@@ -15,28 +14,26 @@ const CREATE_OR_UPDATE_PASSWORD_MUTATION = gql`
   }
 `;
 
-export type CreateOrUpdatePassword = Promise<
-  FetchResult<{
-    createOrUpdatePassword: User;
-  }>
->;
-
-export type CreateOrUpdatePasswordInput = {
-  cleartextPassword: string;
-  userId: string;
-};
-
 export async function createOrUpdatePassword(
   managementCredentials: ManagementCredentials,
   { cleartextPassword, userId }: CreateOrUpdatePasswordInput,
-): CreateOrUpdatePassword {
+): Promise<{ id: string }> {
   const operation = {
     query: CREATE_OR_UPDATE_PASSWORD_MUTATION,
     variables: { cleartextPassword, userId },
   };
 
-  return fetchManagement(
-    managementCredentials,
-    operation,
-  ) as CreateOrUpdatePassword;
+  const { data, errors } = await fetchManagement<{
+    createOrUpdatePassword: { id: string };
+  }>(managementCredentials, operation);
+
+  if (errors) {
+    throw new GraphqlErrors(errors);
+  }
+
+  if (!data.createOrUpdatePassword) {
+    throw new OutputDataNullError();
+  }
+
+  return data.createOrUpdatePassword;
 }

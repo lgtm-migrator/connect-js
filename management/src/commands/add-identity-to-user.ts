@@ -1,9 +1,12 @@
-import { FetchResult } from "apollo-link";
 import gql from "graphql-tag";
 
-import { Identity, IdentityCommandInput } from "../@types/identity";
-import { ManagementCredentials } from "../@types/management";
+import { GraphqlErrors, OutputDataNullError } from "../errors";
 import { fetchManagement } from "../fetch-management";
+import {
+  Identity,
+  IdentityCommandInput,
+  ManagementCredentials,
+} from "../types";
 
 const ADD_IDENTITY_TO_USER = gql`
   mutation addIdentityToUser(
@@ -23,20 +26,26 @@ const ADD_IDENTITY_TO_USER = gql`
   }
 `;
 
-export type AddIdentityToUser = Promise<
-  FetchResult<{
-    AddIdentityToUser: Identity;
-  }>
->;
-
 export async function addIdentityToUser(
   managementCredentials: ManagementCredentials,
   { userId, identityType, identityValue }: IdentityCommandInput,
-): AddIdentityToUser {
+): Promise<Identity> {
   const operation = {
     query: ADD_IDENTITY_TO_USER,
     variables: { userId, type: identityType, value: identityValue },
   };
 
-  return fetchManagement(managementCredentials, operation) as AddIdentityToUser;
+  const { data, errors } = await fetchManagement<{
+    addIdentityToUser: Identity;
+  }>(managementCredentials, operation);
+
+  if (errors) {
+    throw new GraphqlErrors(errors);
+  }
+
+  if (!data.addIdentityToUser) {
+    throw new OutputDataNullError();
+  }
+
+  return data.addIdentityToUser;
 }

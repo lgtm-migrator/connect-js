@@ -1,8 +1,8 @@
-import { FetchResult } from "apollo-link";
 import gql from "graphql-tag";
 
-import { ManagementCredentials } from "../@types/management";
+import { GraphqlErrors, OutputDataNullError } from "../errors";
 import { fetchManagement } from "../fetch-management";
+import { ManagementCredentials } from "../types";
 
 const DELETE_USER_MUTATION = gql`
   mutation deleteUser($userId: String!) {
@@ -12,24 +12,28 @@ const DELETE_USER_MUTATION = gql`
   }
 `;
 
-export type DeleteUserStatus = {
-  status: string;
-};
-
-export type DeleteUser = Promise<
-  FetchResult<{
-    deleteUser: DeleteUserStatus;
-  }>
->;
-
 export async function deleteUser(
   managementCredentials: ManagementCredentials,
   userId: string,
-): DeleteUser {
+): Promise<{ status: string }> {
   const operation = {
     query: DELETE_USER_MUTATION,
     variables: { userId },
   };
 
-  return fetchManagement(managementCredentials, operation) as DeleteUser;
+  const { data, errors } = await fetchManagement<{
+    deleteUser: {
+      status: string;
+    };
+  }>(managementCredentials, operation);
+
+  if (errors) {
+    throw new GraphqlErrors(errors);
+  }
+
+  if (!data.deleteUser) {
+    throw new OutputDataNullError();
+  }
+
+  return data.deleteUser;
 }
