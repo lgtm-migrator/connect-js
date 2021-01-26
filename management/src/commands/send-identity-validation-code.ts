@@ -1,6 +1,12 @@
+import { GraphQLError } from "graphql";
 import gql from "graphql-tag";
 
-import { GraphqlErrors, OutputDataNullError } from "../errors";
+import {
+  GraphqlErrors,
+  IdentityAlreadyUsedError,
+  IdentityValueCantBeBlankError,
+  OutputDataNullError,
+} from "../errors";
 import { fetchManagement } from "../fetch-management";
 import {
   ManagementCredentials,
@@ -55,6 +61,26 @@ export async function sendIdentityValidationCode(
   }>(managementCredentials, operation);
 
   if (errors) {
+    const identityAlreadyUsedError = errors.find(
+      (error) =>
+        (error as GraphQLError & { code: string }).code ===
+        "identity_already_validated",
+    );
+
+    if (identityAlreadyUsedError) {
+      throw new IdentityAlreadyUsedError();
+    } else {
+      const identityValueError = errors.find(
+        (error) =>
+          (error as GraphQLError & { errors: { identity_value: string } })
+            .errors.identity_value === "can't be blank",
+      );
+
+      if (identityValueError) {
+        throw new IdentityValueCantBeBlankError();
+      }
+    }
+
     throw new GraphqlErrors(errors);
   }
 

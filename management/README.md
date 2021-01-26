@@ -116,7 +116,7 @@ const {
   description,
 } = await getProviderApplication(
   managementCredentials,
-  "a3e64872-6326-4813-948d-db8d8fc81bc8"
+  "a3e64872-6326-4813-948d-db8d8fc81bc8",
 );
 ```
 
@@ -129,7 +129,7 @@ import { getIdentities } from "@fewlines/connect-management";
 
 const identities = await getIdentities(
   managementCredentials,
-  "d96ee314-31b2-4e19-88b7-63734b90d1d4"
+  "d96ee314-31b2-4e19-88b7-63734b90d1d4",
 );
 ```
 
@@ -147,7 +147,7 @@ const input = {
 
 const { id, primary, status, type, value } = await getIdentity(
   managementCredentials,
-  input
+  input,
 );
 ```
 
@@ -170,7 +170,7 @@ import { getUserIdFromIdentityValue } from "@fewlines/connect-management";
 
 const userID = await getUserIdFromIdentityValue(
   managementCredentials,
-  "foo@fewlines.co"
+  "foo@fewlines.co",
 );
 ```
 
@@ -183,7 +183,7 @@ import { isUserPasswordSet } from "@fewlines/connect-management";
 
 const isPasswordSet = await isUserPasswordSet(
   managementCredentials,
-  "16071981-1536-4eb2-a33e-892dc84c14a4"
+  "16071981-1536-4eb2-a33e-892dc84c14a4",
 );
 ```
 
@@ -207,6 +207,8 @@ await addIdentityToUser(managementCredentials, input);
 
 ### createOrUpdatePassword
 
+Used to create or update a User password. The function returns the User `id`.
+
 ```ts
 import { createOrUpdatePassword } from "@fewlines/connect-management";
 
@@ -215,10 +217,33 @@ const input = {
   userId: "d8959bfd9-aab8-4de2-81bb-cbd9ea1a4191",
 };
 
-const { id, primary, status, type, value } = await createOrUpdatePassword(
+const isPasswordSet = await createOrUpdatePassword(
   managementCredentials,
-  input
+  input,
 );
+```
+
+If the `cleartextPassword` input doesn't meet the Provider defined rules, the function will throw a specific error containing the `rules` waited for the password to be valid. The data structure of the `rules` property is dependent of the Provider settings.
+
+```ts
+import {
+  createOrUpdatePassword,
+  InvalidPasswordInputError,
+} from "@fewlines/connect-management";
+
+const input = {
+  cleartextPassword: "42",
+  userId: "d8959bfd9-aab8-4de2-81bb-cbd9ea1a4191",
+};
+
+try {
+  await createOrUpdatePassword(managementCredentials, input);
+} catch (error) {
+  if (error instanceof InvalidPasswordInputError) {
+    const { rules } = error;
+    // ...
+  }
+}
 ```
 
 ### createUserWithIdentities
@@ -253,7 +278,7 @@ import { deleteUser } from "@fewlines/connect-management";
 
 const deleteStatus = await deleteUser(
   managementCredentials,
-  "f084749a-2e90-4891-a26f-65e08c4f4e69"
+  "f084749a-2e90-4891-a26f-65e08c4f4e69",
 );
 ```
 
@@ -267,7 +292,7 @@ import { markIdentityAsPrimary } from "@fewlines/connect-management";
 
 const newPrimaryIdentity = await markIdentityAsPrimary(
   managementCredentials,
-  "504c741c-f9dd-425c-912a-03fe051b0e6e"
+  "504c741c-f9dd-425c-912a-03fe051b0e6e",
 );
 ```
 
@@ -286,7 +311,7 @@ const input = {
 
 const isIdentityRemove = await removeIdentityFromUser(
   managementCredentials,
-  input
+  input,
 );
 ```
 
@@ -320,6 +345,45 @@ const {
   eventId,
   nonce,
 } = await sendIdentityValidationCode(managementCredentials, input);
+```
+
+If the Identity `value` input is blank or is identical to an already validated Identity for the current Provider, the function will throw specific errors corresponding to each case.
+
+```ts
+import {
+  sendIdentityValidationCode,
+  IdentityAlreadyUsedError,
+  IdentityValueCantBeBlankError,
+} from "@fewlines/connect-management";
+
+const input = {
+  callbackUrl: "/",
+  identity: {
+    id: "12488dfe-8e46-4391-a8bb-f0db41078942",
+    type: "EMAIL",
+    value: "",
+    status: "validated",
+    primary: true,
+  },
+  userId: "37b21863-3f38-4d20-848d-3108337a0b8b",
+};
+
+try {
+  const {
+    callbackUrl,
+    localeCode,
+    eventId,
+    nonce,
+  } = await sendIdentityValidationCode(managementCredentials, input);
+} catch (error) {
+  if (error instanceof IdentityValueCantBeBlankError) {
+    // ...
+  }
+
+  if (error instanceof IdentityAlreadyUsedError) {
+    // ...
+  }
+}
 ```
 
 ### updateProviderApplication

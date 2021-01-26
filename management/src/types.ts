@@ -67,7 +67,7 @@ export type IdentityCommandInput = {
   identityValue: string;
 };
 
-export type SetPasswordErrorRules = {
+export type PasswordRules = {
   min_digits: {
     error: boolean;
     minimum: number;
@@ -85,19 +85,6 @@ export type SetPasswordErrorRules = {
 export type CreateOrUpdatePasswordInput = {
   cleartextPassword: string;
   userId: string;
-};
-
-export type SetPasswordError = {
-  code: string;
-  locations: [
-    {
-      column: number;
-      line: number;
-    },
-  ];
-  message: string;
-  path: string[];
-  rules: SetPasswordErrorRules;
 };
 
 export type SendIdentityVerificationCodeInput = {

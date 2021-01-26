@@ -20,7 +20,7 @@ const CREATE_USER_WITH_IDENTITIES_MUTATION = gql`
 export async function createUserWithIdentities(
   managementCredentials: ManagementCredentials,
   { identities, localeCode }: CreateUserWithIdentitiesInput,
-): Promise<{ id: string }> {
+): Promise<string> {
   const operation = {
     query: CREATE_USER_WITH_IDENTITIES_MUTATION,
     variables: { identities, localeCode },
@@ -38,5 +38,5 @@ export async function createUserWithIdentities(
     throw new OutputDataNullError();
   }
 
-  return data.createUserWithIdentities;
+  return data.createUserWithIdentities.id;
 }
