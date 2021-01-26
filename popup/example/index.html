@@ -1,0 +1,90 @@
+<style>
+  html,
+  body {
+    height: 100%;
+  }
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    flex-direction: column;
+  }
+  button {
+    background-color: #2f3bb3;
+    color: #fff;
+    padding: 13px 35px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.25em;
+    font-weight: 600;
+    height: 50px;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 1em;
+  }
+</style>
+
+<div id="main" class="center">
+  <div>
+    <label for="provider-url">Provider URL:</label>
+    <input type="text" id="provider-url" autocomplete />
+  </div>
+  <div>
+    <label for="client-id">client ID:</label>
+    <input type="text" id="client-id" autocomplete />
+  </div>
+  <div>
+    <label for="scopes">Scopes:</label>
+    <input type="text" id="scopes" value="email" />
+  </div>
+  <button id="init">Initialize</button>
+</div>
+
+<script type="text/javascript" src="./connect-popup.min.js"></script>
+<script type="text/javascript">
+  function initConnect(config, connectButton, resultDiv) {
+    const main = document.getElementById("main");
+    main.innerHTML = "";
+    main.appendChild(connectButton);
+    main.appendChild(result);
+
+    const login = new ConnectPopup({
+      connect: {
+        providerURL: config.providerURL,
+        clientId: config.clientId,
+        scopes: config.scopes,
+      },
+      onAuthorizationCodeReceived: (code, state) => {
+        resultDiv.innerHTML = `Code = "${code}"; State = "${state}"`;
+      },
+    });
+
+    connectButton.addEventListener(
+      "click",
+      login.openConnectPopup({ state: "state test" })
+    );
+  }
+
+  const connectButton = document.createElement("button");
+  connectButton.innerHTML = "Connect";
+  const result = document.createElement("div");
+
+  if (window.localStorage.getItem("connect-config")) {
+    const config = JSON.parse(window.localStorage.getItem("connect-config"));
+    initConnect(config, connectButton, result);
+  } else {
+    document.getElementById("init").addEventListener("click", () => {
+      const config = {
+        providerURL: document.getElementById("provider-url").value,
+        clientId: document.getElementById("client-id").value,
+        scopes: document.getElementById("scopes").value,
+      };
+      window.localStorage.setItem("connect-config", JSON.stringify(config));
+
+      initConnect(config, connectButton, result);
+    });
+  }
+</script>
