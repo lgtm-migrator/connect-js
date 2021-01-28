@@ -16,7 +16,7 @@ yarn add @fewlines/connect-client
 
 You first need to initialize the client instance, called `OAuth2Client`. This class takes the following constructor parameters:
 
-- `providerURL`: The base URL corresponding to the Provider.
+- `openIDConfigurationURL`: The URL to retrieve the OpenID configuration.
 - `clientID`: Client ID of the online service (e.g. internet website, application) that uses the Provider Authentication and Authorization service for its User.
 - `clientSecret`: Paired with the client ID, used to authenticate the Application from which the User intent to sign in.
 - `redirectURI`: URI used to redirect to the original Application website after a successful login in on Connect.
@@ -30,7 +30,7 @@ import OAuth2Client, {
 } from "@fewlines/connect-client";
 
 const oauthClientConstructorProps: OAuth2ClientConstructor = {
-  providerURL: "***",
+  openIDConfigurationURL: "***",
   clientID: "***",
   clientSecret: "***",
   redirectURI: "***",

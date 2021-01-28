@@ -9,6 +9,7 @@
 .dynamodb/
 .env
 .env.test
+!.env_vars.sample
 .eslintcache
 .fusebox/
 .grunt

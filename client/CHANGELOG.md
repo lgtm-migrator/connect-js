@@ -2,9 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2] - 2021-01-28
+
+- Changed back `openIDConfigurationURL` to `providerURL` in the `oauth2Client` constructor.
+- Storing `JWKS` in the `oauth2Client` for performances.
+
 ## [0.2.1] - 2021-01-14
 
 - Added an optional property (`openIDConfiguration`) to the `oauth2Client` constructor.
+- Changed `openIDConfigurationURL` to `providerURL` in the `oauth2Client` constructor.
 
 ## [0.2.0] - 2021-01-13
 

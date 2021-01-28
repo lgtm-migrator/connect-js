@@ -14,12 +14,6 @@ describe("rsaPublicKeyToPEM", () => {
     const { e, n } = validKey;
     const publicKey = rsaPublicKeyToPEM(n, e);
 
-    const expectedKey = `-----BEGIN RSA PUBLIC KEY-----
-MIGJAoGBAMtzOyamOPSXi/6K5z+2WNkJTu+mpEt+kY9YilUiJRR++eDZ6prRsDKw
-lWcwlq3PPNra2xrg4ZpdqbDpgiAYygaZ4ITSwWQCxjUXpQqn1ewsvhDK0L0PlFm6
-IE+8Xz6C/lWIwmSk3l6LH8zDTGRbpv1Z5P72ASopV2X0B9beLKIVAgMBAAE=
------END RSA PUBLIC KEY-----`;
-
-    expect(publicKey).toMatch(expectedKey);
+    expect(publicKey).toMatch(process.env.PEM_RSA_PUBLIC_KEY);
   });
 });

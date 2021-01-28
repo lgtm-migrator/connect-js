@@ -25,7 +25,7 @@ describe("OAuth2Client", () => {
   });
 
   const oauthClientConstructorProps: OAuth2ClientConstructor = {
-    providerURL: "http://mocked-openid-url.test",
+    openIDConfigurationURL: "http://mocked-openid-url.test",
     clientID: "7dc44ab1-177a-459f-8be5-e485f16c8e87",
     clientSecret: defaultSecret,
     redirectURI: "http://mocked-redirect-url.test",
@@ -470,37 +470,9 @@ describe("OAuth2Client", () => {
       const mockedJWEAccessToken =
         "eyJhbGciOiJSU0EtT0FFUC0yNTYiLCJlbmMiOiJBMTI4R0NNIn0.w4eo3k66Kr20CVrUQYDCgIR9ZFTFmbdtHvCGEGEYqQt3xJKo1zDT8nrkApHBTWgpg09BrvToBcHYhpZSCV9dbMSzjPWvjNlQTr5f7lOQ4Q34MQaCmH3LWr5toCYGl9iXJLolpW-r9vQNuwJIoYIinycXYJMCMgT72miKbHC66qJf1YoOgOqC9fc8E4V79fYuAaLmalEncqJHTn_u67e5qEZNqRrgFlxd4b9IPhMuRmaP3OICvtSFBIuFH64gVke6ckOwK-mGIIA-qQzwgkZrWnddmIMWKhSR7CwtXzKY46alHJrN1pvaAHBVqHCKi3JtBL_sCtpVZXHfCmhBqWcW2A.vxelVyonD7vTWBYX.yz7wOYxlwTRGeuABqlQ110Sw28nFsHjBig9kwyGFz4D6fqjrY_6mM2fYBZDbPuviumQifJ3vDvilV4dkIXJ9csSEgLlaLOK043kpT2T-2_XFnxdG7sfBHRimsg_ag889OjdZiGT4hMK-K_0lyZ8dOTHgcRMpLApX_s8Cog.kxPk7co7dttJ9l9ZrKxV9g";
 
-      const mockedPrivateKey = `-----BEGIN RSA PRIVATE KEY-----
-        MIIEogIBAAKCAQEAyI/9q9TjkglfDJebAjC5vt6HFZYthcU2rc2/4bIETIUkwDcf
-        PoTrSFarccZ9pl9bAXlMfKhc6LcRB6XcBWACeDoblbgMzaZ/4rTUGrReUHB0HpmZ
-        kyXDkN8iezTNG2gKRhVrS2rjlpLKMIDKVfG/xXsNQmT4iVs07MBSJToTKT2lIzbE
-        u4sEZz9GUhwffeKBmh3uxX+ELxpp++eShD3pGPo5l3mkozEYRpa5tK2aXHfgNm1+
-        KLkWq9uNd+msj/4lC0AxQ5a8re4z5zP2IJoN9buJqvV7e8lpKoAPJ76jcBEEeZBD
-        LNvP+ZXcSRkhj6l/cJjYgQcr8DtoJ97F0MWlywIDAQABAoIBABCP837RIcnZhEPh
-        8ScJJw2gCr+5myDE3HMV3pagwMIg7JwC8U2UZGmg3p+SqKWokjdY8PwKW0HMfFeJ
-        VtYKy6lqAwUmIciJy13JWQqrgm5aGvy76nbAU5oPEyXhgl6VBOQsuKONvCWfEZtX
-        x125jQCd3MZy2CNfqMs0RpRUa2ioTSI2JWJnqsYuNEHysgCL9+jtEqDm62Qmp4nG
-        F02+EZilu8wM5XOKkv7Q/zsSimjTP5rXxAVhvlUvsJGTj67fFRnoY4LmAkSramgO
-        CHgvb3+GjiCbu4WFFf06P89dvt5Q6OtjWJEojmgbrrmjk9ccBtD4wtIS/JfbuIMF
-        jnDVMqECgYEA4pyN9pQGuXutEYZ4wAi8FR++ruNbPscuorUID/uW137H3oTuLXig
-        L2u64F7JQ9692sXfecmL53goY2+qSNo7xdfBSoF0q8MLlWL0VhU6S9vYHqa2TjDX
-        WPzNuQWIlxWzKTUVj0Jfw5TBbri+PaTn4hMEPCqkzbdW2sK4XZ0zU+cCgYEA4pKd
-        F+t825Prxqsky1e6vfwfgdLuhZeBRLPHzssAB0GtsvhmsBj36JmU/OdPXDKIPShO
-        fx0/jRmuureja+uNlXUUsBxQXfz4O5XS/otIsI3GxO415kezRNvB/eLAogO4JTvz
-        zH1B+1VnsBpealFQYGSZ6xqCN94OunyDnjPHIn0CgYBQPasvEr9G0no36Gu9Y9pl
-        iHYWqz7V/eWPi5atQiLpb2UKb/t+cmYWJIlphWay9542ZzZ4g1tcvPlgLFwZq9za
-        c0loPmq3nzrszLtD+ARKdDAUumd3TGgUhH+78i+pf++OudNGhPQv5u6PbC9A2LGb
-        JaysOVVd2nuQvr5Vt6JDJQKBgGwU4omJlXstmhighaHWzMdaYTFODOh/eHPsixEz
-        t2S+yPyKEHpKvuAfe3oVYb8qf+EkvCVZL3rA2KBLf9K4gEbenirQpunfBg9ujkNM
-        8DUAvOQuelnKtFLRvj29kIT43zwr2EYhLnuVpyvTuFxhQ8Vn2CDV+W5rKH1/bk3m
-        h0UFAoGAOWOocpeq5LpV0IYjvGUqPol/eVLU8TjHcesPbRpyYGPx6GgG2yFAtvQT
-        q/PrBnwqO+Qfe+TRkMPuCpvUFwZq7ytKlPiBCV5LqdmhoouZtA9fCulK47kwRQQt
-        8GdyvRZzfC3P2vdaezSk3Wv3bqhXmu7R4JXx+jFg1mao/i+BwfM=
-        -----END RSA PRIVATE KEY-----`;
-
       const decryptedMockedJWEAccessToken = await oauthClient.decryptJWE<{
         iss: string;
-      }>(mockedJWEAccessToken, mockedPrivateKey, false);
+      }>(mockedJWEAccessToken, process.env.PEM_RSA_PRIVATE_KEY_2, false);
 
       expect(decryptedMockedJWEAccessToken.iss).toStrictEqual(
         mockedAccessTokenClearPayload.iss,

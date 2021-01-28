@@ -1,6 +1,6 @@
 {
   "name": "@fewlines/connect-client",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": "Fewlines",
   "description": "OAuth2 Client for the Connect JS SDK",
   "license": "MIT",
@@ -19,8 +19,7 @@
     "prepublishOnly": "yarn lint",
     "experimental-publish": "yarn publish --new-version \"0.0.0-experimental-$(git rev-parse --short HEAD)\" --access public --tag experimental",
     "preversion": "yarn lint",
-    "test": "jest",
-    "experimental-publish": "yarn publish --new-version \"0.0.0-experimental-$(git rev-parse --short HEAD)\" --access public --tag experimental"
+    "test": "jest"
   },
   "dependencies": {
     "jsonwebtoken": "8.5.1",
