@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.3] - 2021-02-06
+- Fixed the method of calling the Token endpoint by following the RFC (using `application/x-www-form-urlencoded` as Content Type).
+
 ## [0.2.2] - 2021-01-28
 
 - Changed back `openIDConfigurationURL` to `providerURL` in the `oauth2Client` constructor.
