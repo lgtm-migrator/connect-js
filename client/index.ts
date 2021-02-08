@@ -61,14 +61,15 @@ class OAuth2Client {
       : undefined;
   }
 
-  private async setOpenIDConfiguration(): Promise<void> {
+  private async getOpenIDConfiguration(): Promise<OpenIDConfiguration> {
     if (this.openIDConfiguration) {
-      return Promise.resolve();
+      return Promise.resolve(this.openIDConfiguration);
     } else {
       await this.fetch(this.openIDConfigurationURL)
         .then((response) => response.json())
         .then((openIDConfiguration) => {
           this.openIDConfiguration = openIDConfiguration;
+          return openIDConfiguration;
         })
         .catch((error) => {
           throw error;
@@ -76,16 +77,21 @@ class OAuth2Client {
     }
   }
 
-  private async setJWKS(): Promise<void> {
-    await this.setOpenIDConfiguration();
+  private async getJWKS(): Promise<JWKSDT> {
+    const openIDConfiguration = await this.getOpenIDConfiguration();
+
+    if (!this.openIDConfiguration.jwks_uri) {
+      throw new MissingJWKSURI("Missing JWKS URI for RS256 encoded JWT");
+    }
 
     if (this.jwks) {
-      return Promise.resolve();
+      return Promise.resolve(this.jwks);
     } else {
-      await this.fetch(this.openIDConfiguration.jwks_uri)
+      await this.fetch(openIDConfiguration.jwks_uri)
         .then((response) => response.json())
         .then((jwks) => {
           this.jwks = jwks;
+          return jwks;
         })
         .catch((error) => {
           throw error;
@@ -94,12 +100,9 @@ class OAuth2Client {
   }
 
   async getAuthorizationURL(state?: string): Promise<URL> {
-    await this.setOpenIDConfiguration();
+    const openIDConfiguration = await this.getOpenIDConfiguration();
 
-    const {
-      authorization_endpoint,
-      scopes_supported,
-    } = this.openIDConfiguration;
+    const { authorization_endpoint, scopes_supported } = openIDConfiguration;
 
     const areScopesSupported = this.scopes.every((scope) =>
       scopes_supported.includes(scope),
@@ -129,7 +132,7 @@ class OAuth2Client {
   async getTokensFromAuthorizationCode(
     authorizationCode: string,
   ): Promise<OAuth2Tokens> {
-    await this.setOpenIDConfiguration();
+    const openIDConfiguration = await this.getOpenIDConfiguration();
 
     const callback = {
       client_id: this.clientID,
@@ -140,7 +143,7 @@ class OAuth2Client {
     };
 
     const tokenEndpointResponse = await this.fetch(
-      this.openIDConfiguration.token_endpoint,
+      openIDConfiguration.token_endpoint,
       {
         method: "POST",
         headers: {
@@ -166,15 +169,19 @@ class OAuth2Client {
   }
 
   async verifyJWT<T = unknown>(accessToken: string, algo: string): Promise<T> {
-    await this.setOpenIDConfiguration();
-    await this.setJWKS();
+    const [header, payload] = accessToken.split(".");
+
+    const { alg, kid } = decodeJWTPart<{ alg: string; kid: string }>(header);
+    const { aud } = decodeJWTPart<{ aud: string }>(payload);
+    let jwks;
+
+    if (kid) {
+      if (!this.jwks) {
+        jwks = await this.getJWKS();
+      }
+    }
 
     return new Promise((resolve, reject) => {
-      const [header, payload] = accessToken.split(".");
-
-      const { alg, kid } = decodeJWTPart<{ alg: string; kid: string }>(header);
-      const { aud } = decodeJWTPart<{ aud: string }>(payload);
-
       if (
         (typeof aud === "string" && aud !== this.audience) ||
         (Array.isArray(aud) && !aud.includes(this.audience))
@@ -195,35 +202,27 @@ class OAuth2Client {
         );
       } else if (alg === "RS256" && algo === "RS256") {
         if (kid) {
-          if (this.jwks) {
-            const validKey = this.jwks.keys.find(
-              (keyObject) => keyObject.kid === kid,
+          const validKey = jwks.keys.find((keyObject) => keyObject.kid === kid);
+
+          if (validKey) {
+            const { e, n } = validKey;
+            const publicKey = rsaPublicKeyToPEM(n, e);
+
+            return jwt.verify(
+              accessToken,
+              publicKey,
+              {
+                algorithms: ["RS256"],
+              },
+              (error: jwt.VerifyErrors | null, decoded: unknown) => {
+                return error ? reject(error) : resolve(decoded as T);
+              },
             );
-
-            if (validKey) {
-              const { e, n } = validKey;
-              const publicKey = rsaPublicKeyToPEM(n, e);
-
-              return jwt.verify(
-                accessToken,
-                publicKey,
-                {
-                  algorithms: ["RS256"],
-                },
-                (error: jwt.VerifyErrors | null, decoded: unknown) => {
-                  return error ? reject(error) : resolve(decoded as T);
-                },
-              );
-            } else {
-              reject(
-                new InvalidKeyIDRS256(
-                  "Invalid key ID (kid) for RS256 encoded JWT",
-                ),
-              );
-            }
           } else {
             reject(
-              new MissingJWKSURI("Missing JWKS URI for RS256 encoded JWT"),
+              new InvalidKeyIDRS256(
+                "Invalid key ID (kid) for RS256 encoded JWT",
+              ),
             );
           }
         } else {
@@ -258,7 +257,7 @@ class OAuth2Client {
   }
 
   async refreshTokens(refresh_token: string): Promise<RefreshTokenResponse> {
-    await this.setOpenIDConfiguration();
+    const openIDConfiguration = await this.getOpenIDConfiguration();
 
     const payload = {
       client_id: this.clientID,
@@ -268,7 +267,7 @@ class OAuth2Client {
       scope: this.scopes.join(" "),
     };
 
-    return this.fetch(this.openIDConfiguration.token_endpoint, {
+    return this.fetch(openIDConfiguration.token_endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
