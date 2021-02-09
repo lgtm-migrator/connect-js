@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.5] - 2021-02-09
+
+- Fixing issues with `getOpenIDConfiguration`, `getJWKS` and `verifyJWT`.
+
 ## [0.2.4] - 2021-02-08
 
 - Optimising the storage and the fetching of `JWKS` and `openIDConfiguration`.

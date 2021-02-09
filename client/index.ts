@@ -65,7 +65,7 @@ class OAuth2Client {
     if (this.openIDConfiguration) {
       return Promise.resolve(this.openIDConfiguration);
     } else {
-      await this.fetch(this.openIDConfigurationURL)
+      return await this.fetch(this.openIDConfigurationURL)
         .then((response) => response.json())
         .then((openIDConfiguration) => {
           this.openIDConfiguration = openIDConfiguration;
@@ -87,7 +87,7 @@ class OAuth2Client {
     if (this.jwks) {
       return Promise.resolve(this.jwks);
     } else {
-      await this.fetch(openIDConfiguration.jwks_uri)
+      return await this.fetch(openIDConfiguration.jwks_uri)
         .then((response) => response.json())
         .then((jwks) => {
           this.jwks = jwks;
@@ -173,13 +173,8 @@ class OAuth2Client {
 
     const { alg, kid } = decodeJWTPart<{ alg: string; kid: string }>(header);
     const { aud } = decodeJWTPart<{ aud: string }>(payload);
-    let jwks;
 
-    if (kid) {
-      if (!this.jwks) {
-        jwks = await this.getJWKS();
-      }
-    }
+    const jwks = kid && (await this.getJWKS());
 
     return new Promise((resolve, reject) => {
       if (
