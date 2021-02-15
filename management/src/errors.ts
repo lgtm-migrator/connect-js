@@ -1,8 +1,9 @@
 import { GraphQLError } from "graphql";
+import { FetchError } from "node-fetch";
 
 import { PasswordRules } from "./types";
 
-export class GraphqlError extends Error {
+class GraphqlError extends Error {
   parentError: GraphqlErrors;
 
   constructor(message: string, error: GraphqlErrors) {
@@ -11,18 +12,18 @@ export class GraphqlError extends Error {
   }
 }
 
-export class GraphqlErrors extends Error {
+class GraphqlErrors extends Error {
   constructor(errors: readonly GraphQLError[]) {
     const message = errors.map(({ message }) => message).join("\n");
     super(message);
   }
 }
 
-export class OutputDataNullError extends Error {
+class OutputDataNullError extends Error {
   readonly message = "Output Data Null";
 }
 
-export class InvalidPasswordInputError extends Error {
+class InvalidPasswordInputError extends Error {
   readonly rules: PasswordRules;
 
   constructor(rules: PasswordRules) {
@@ -31,10 +32,29 @@ export class InvalidPasswordInputError extends Error {
   }
 }
 
-export class IdentityAlreadyUsedError extends Error {
+class IdentityAlreadyUsedError extends Error {
   readonly message = "Identity already used";
 }
 
-export class IdentityValueCantBeBlankError extends Error {
+class IdentityValueCantBeBlankError extends Error {
   readonly message = "Identity value can't be Blank";
 }
+
+class ConnectUnreachableError extends Error {
+  readonly parentError: FetchError;
+
+  constructor(parentError: FetchError) {
+    super();
+    this.parentError = parentError;
+  }
+}
+
+export {
+  ConnectUnreachableError,
+  GraphqlError,
+  GraphqlErrors,
+  OutputDataNullError,
+  InvalidPasswordInputError,
+  IdentityAlreadyUsedError,
+  IdentityValueCantBeBlankError,
+};

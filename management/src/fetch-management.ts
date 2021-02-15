@@ -2,10 +2,12 @@ import { execute, makePromise, GraphQLRequest, FetchResult } from "apollo-link";
 import { setContext } from "apollo-link-context";
 import { HttpLink } from "apollo-link-http";
 import fetch from "cross-fetch";
+import { FetchError } from "node-fetch";
 
+import { ConnectUnreachableError } from "./errors";
 import { ManagementCredentials } from "./types";
 
-export function fetchManagement<T = unknown>(
+export async function fetchManagement<T = unknown>(
   managementCredentials: ManagementCredentials,
   operation: GraphQLRequest,
 ): Promise<FetchResult<T>> {
@@ -22,8 +24,15 @@ export function fetchManagement<T = unknown>(
       },
     };
   });
+  try {
+    return (await makePromise(
+      execute(authLink.concat(httpLink), operation),
+    )) as Promise<FetchResult<T>>;
+  } catch (error) {
+    if (error instanceof FetchError) {
+      throw new ConnectUnreachableError(error);
+    }
 
-  return makePromise(execute(authLink.concat(httpLink), operation)) as Promise<
-    FetchResult<T>
-  >;
+    throw error;
+  }
 }
