@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2021-02-15
+
+- Added retry of JWT verification to handle public key rotation.
+
 ## [0.2.5] - 2021-02-09
 
 - Fixing issues with `getOpenIDConfiguration`, `getJWKS` and `verifyJWT`.

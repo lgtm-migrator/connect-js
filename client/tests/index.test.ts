@@ -183,23 +183,6 @@ describe("OAuth2Client", () => {
   describe("verifyJWT", () => {
     const HS256JWT = generateHS256JWS();
 
-    test("should initialize the openIDConfiguration", async () => {
-      expect.assertions(2);
-
-      fetch
-        .once(JSON.stringify(mockedOpenIdConf))
-        .once(JSON.stringify(mockedJWKS));
-
-      const oauthClient = new OAuth2Client(oauthClientConstructorProps);
-
-      await oauthClient.verifyJWT(HS256JWT, "HS256");
-
-      expect(oauthClient.openIDConfiguration).not.toBe(undefined);
-      expect(oauthClient.openIDConfiguration).toEqual(
-        expect.objectContaining(mockedOpenIdConf),
-      );
-    });
-
     test("is should throw an error if wrong audience", async () => {
       expect.assertions(2);
 
@@ -326,6 +309,7 @@ describe("OAuth2Client", () => {
 
         fetch
           .once(JSON.stringify(mockedOpenIdConf))
+          .once(JSON.stringify(wrongKidJWKS))
           .once(JSON.stringify(wrongKidJWKS));
 
         await oauthClient.verifyJWT(RS256JWT, "RS256").catch((error) => {
@@ -334,6 +318,46 @@ describe("OAuth2Client", () => {
             "Invalid key ID (kid) for RS256 encoded JWT",
           );
         });
+      });
+
+      test("should refetch and get the new JWKS if first fetch fails", async () => {
+        expect.assertions(2);
+
+        const mockedDecodedJWT = {
+          aud: ["connect-account"],
+          exp: 2524651200,
+          iss:
+            "https://bs-provider.prod.connect.connect.aws.eu-west-2.k8s.fewlines.net",
+          scope: "profile email",
+          sub: "c4b1cb59-1c50-494a-87e5-32a5fe6e7caa",
+        };
+
+        const wrongKidJWKS = {
+          keys: [
+            {
+              e: "AQAB",
+              kty: "RSA",
+              kid: "wrongKid",
+              n:
+                "y3M7JqY49JeL/ornP7ZY2QlO76akS36Rj1iKVSIlFH754NnqmtGwMrCVZzCWrc882trbGuDhml2psOmCIBjKBpnghNLBZALGNRelCqfV7Cy+EMrQvQ+UWbogT7xfPoL+VYjCZKTeXosfzMNMZFum/Vnk/vYBKilXZfQH1t4sohU=",
+              alg: "RS256",
+            },
+          ],
+        };
+
+        const oauthClient = new OAuth2Client({
+          ...oauthClientConstructorProps,
+          audience: "connect-account",
+        });
+
+        fetch
+          .once(JSON.stringify(mockedOpenIdConf))
+          .once(JSON.stringify(wrongKidJWKS))
+          .once(JSON.stringify(mockedJWKS));
+
+        const decodedJWT = await oauthClient.verifyJWT(RS256JWT, "RS256");
+        expect(decodedJWT).not.toBe(undefined);
+        expect(decodedJWT).toEqual(expect.objectContaining(mockedDecodedJWT));
       });
 
       test("should throw an error if missing key id", async () => {
