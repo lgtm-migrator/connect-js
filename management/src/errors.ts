@@ -49,6 +49,14 @@ class ConnectUnreachableError extends Error {
   }
 }
 
+class InvalidValidationCodeError extends Error {
+  readonly message = "Invalid validation code";
+}
+
+class IdentityNotFoundError extends Error {
+  readonly message = "Identity Not Found";
+}
+
 export {
   ConnectUnreachableError,
   GraphqlError,
@@ -57,4 +65,6 @@ export {
   InvalidPasswordInputError,
   IdentityAlreadyUsedError,
   IdentityValueCantBeBlankError,
+  InvalidValidationCodeError,
+  IdentityNotFoundError,
 };

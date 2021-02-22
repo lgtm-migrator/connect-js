@@ -6,3 +6,4 @@ export * from "./mark-identity-as-primary";
 export * from "./remove-identity-from-user";
 export * from "./send-identity-validation-code";
 export * from "./update-connect-application";
+export * from "./update-identity";

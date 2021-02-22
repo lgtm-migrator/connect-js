@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2021-02-18
+
+- New function called `updateIdentity`, that handles the rollback of the process in case of an exception raised.
+
 ## [0.2.1] - 2021-02-12
 
 - `fetchManagement` now throws a `ConnectUnreachableError` error, derived from `FetchError` (`@types/node-fetch`).
