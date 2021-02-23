@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2021-02-22
+
+- Refactored `updateIdentity` props (cf. documentation).
+
 ## [0.3.0] - 2021-02-18
 
 - New function called `updateIdentity`, that handles the rollback of the process in case of an exception raised.
