@@ -248,3 +248,17 @@ const key = {
 const { e, n } = key;
 const publicKey = rsaPublicKeyToPEM(n, e);
 ```
+
+## Exceptions
+
+Here is an overview of the exceptions raised from the library:
+
+- MissingJWKSURIError
+- InvalidKeyIDRS256Error
+- MissingKeyIDHS256Error
+- AlgoNotSupportedError
+- InvalidAudienceError
+- ScopesNotSupportedError
+- UnreachableError
+
+In case of an issue with fetching the **OpenID** endpoints, the library will throw a `UnreachableError`, based on `FetchError`.

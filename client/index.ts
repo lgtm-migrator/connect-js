@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import nodeFetch from "node-fetch";
+import nodeFetch, { FetchError } from "node-fetch";
 import jose from "node-jose";
 
 import {
@@ -9,6 +9,7 @@ import {
   AlgoNotSupportedError,
   InvalidAudienceError,
   ScopesNotSupportedError,
+  UnreachableError,
 } from "./src/errors";
 import {
   OpenIDConfiguration,
@@ -72,6 +73,10 @@ class OAuth2Client {
           return openIDConfiguration;
         })
         .catch((error) => {
+          if (error instanceof FetchError) {
+            throw new UnreachableError(error);
+          }
+
           throw error;
         });
     }
@@ -93,6 +98,13 @@ class OAuth2Client {
       .then((jwks) => {
         this.jwks = jwks;
         return jwks;
+      })
+      .catch((error) => {
+        if (error instanceof FetchError) {
+          throw new UnreachableError(error);
+        }
+
+        throw error;
       });
   }
 
@@ -289,7 +301,15 @@ class OAuth2Client {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams(payload),
-    }).then((response) => response.json());
+    })
+      .then((response) => response.json())
+      .catch((error) => {
+        if (error instanceof FetchError) {
+          throw new UnreachableError(error);
+        }
+
+        throw error;
+      });
   }
 }
 
@@ -306,6 +326,7 @@ export {
   AlgoNotSupportedError,
   InvalidAudienceError,
   ScopesNotSupportedError,
+  UnreachableError,
   OAuth2Tokens,
   JWTPayload,
   CustomPayload,
