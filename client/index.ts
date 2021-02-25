@@ -3,12 +3,12 @@ import nodeFetch from "node-fetch";
 import jose from "node-jose";
 
 import {
-  MissingJWKSURI,
-  InvalidKeyIDRS256,
-  MissingKeyIDHS256,
-  AlgoNotSupported,
-  InvalidAudience,
-  ScopesNotSupported,
+  MissingJWKSURIError,
+  InvalidKeyIDRS256Error,
+  MissingKeyIDHS256Error,
+  AlgoNotSupportedError,
+  InvalidAudienceError,
+  ScopesNotSupportedError,
 } from "./src/errors";
 import {
   OpenIDConfiguration,
@@ -85,7 +85,7 @@ class OAuth2Client {
     const openIDConfiguration = await this.getOpenIDConfiguration();
 
     if (!openIDConfiguration.jwks_uri) {
-      throw new MissingJWKSURI("Missing JWKS URI for RS256 encoded JWT");
+      throw new MissingJWKSURIError("Missing JWKS URI for RS256 encoded JWT");
     }
 
     return await this.fetch(openIDConfiguration.jwks_uri)
@@ -109,7 +109,9 @@ class OAuth2Client {
       const publicKey = rsaPublicKeyToPEM(n, e);
       return publicKey;
     } else {
-      throw new InvalidKeyIDRS256("Invalid key ID (kid) for RS256 encoded JWT");
+      throw new InvalidKeyIDRS256Error(
+        "Invalid key ID (kid) for RS256 encoded JWT",
+      );
     }
   }
 
@@ -159,7 +161,7 @@ class OAuth2Client {
     );
 
     if (!areScopesSupported) {
-      throw new ScopesNotSupported("Scopes are not supported");
+      throw new ScopesNotSupportedError("Scopes are not supported");
     }
 
     const authorizeURL = new URL(authorization_endpoint);
@@ -230,7 +232,7 @@ class OAuth2Client {
       (typeof aud === "string" && aud !== this.audience) ||
       (Array.isArray(aud) && !aud.includes(this.audience))
     ) {
-      throw new InvalidAudience("Invalid audience");
+      throw new InvalidAudienceError("Invalid audience");
     }
 
     if (alg === "HS256" && algo === "HS256") {
@@ -241,12 +243,12 @@ class OAuth2Client {
 
         return await this.verifyRS256(accessToken, publicKey);
       } else {
-        throw new MissingKeyIDHS256(
+        throw new MissingKeyIDHS256Error(
           "Missing key ID (kid) for RS256 encoded JWT",
         );
       }
     } else {
-      throw new AlgoNotSupported("Encoding algo not supported");
+      throw new AlgoNotSupportedError("Encoding algo not supported");
     }
   }
 
@@ -298,12 +300,12 @@ export {
   OAuth2ClientConstructor,
   decodeJWTPart,
   rsaPublicKeyToPEM,
-  MissingJWKSURI,
-  InvalidKeyIDRS256,
-  MissingKeyIDHS256,
-  AlgoNotSupported,
-  InvalidAudience,
-  ScopesNotSupported,
+  MissingJWKSURIError,
+  InvalidKeyIDRS256Error,
+  MissingKeyIDHS256Error,
+  AlgoNotSupportedError,
+  InvalidAudienceError,
+  ScopesNotSupportedError,
   OAuth2Tokens,
   JWTPayload,
   CustomPayload,

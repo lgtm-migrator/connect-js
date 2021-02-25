@@ -5,11 +5,11 @@ import jwt, { JsonWebTokenError } from "jsonwebtoken";
 import jose from "node-jose";
 
 import OAuth2Client, {
-  InvalidAudience,
-  InvalidKeyIDRS256,
-  MissingKeyIDHS256,
-  AlgoNotSupported,
-  ScopesNotSupported,
+  InvalidAudienceError,
+  InvalidKeyIDRS256Error,
+  MissingKeyIDHS256Error,
+  AlgoNotSupportedError,
+  ScopesNotSupportedError,
   defaultSecret,
   OAuth2ClientConstructor,
   defaultPayload,
@@ -124,7 +124,7 @@ describe("OAuth2Client", () => {
       });
 
       await oauthClient.getAuthorizationURL().catch((error) => {
-        expect(error).toBeInstanceOf(ScopesNotSupported);
+        expect(error).toBeInstanceOf(ScopesNotSupportedError);
         expect(error.message).toBe("Scopes are not supported");
       });
     });
@@ -200,7 +200,7 @@ describe("OAuth2Client", () => {
       await oauthClient
         .verifyJWT(wrongAudienceHS256JWT, "HS256")
         .catch((error) => {
-          expect(error).toBeInstanceOf(InvalidAudience);
+          expect(error).toBeInstanceOf(InvalidAudienceError);
           expect(error.message).toBe("Invalid audience");
         });
     });
@@ -313,7 +313,7 @@ describe("OAuth2Client", () => {
           .once(JSON.stringify(wrongKidJWKS));
 
         await oauthClient.verifyJWT(RS256JWT, "RS256").catch((error) => {
-          expect(error).toBeInstanceOf(InvalidKeyIDRS256);
+          expect(error).toBeInstanceOf(InvalidKeyIDRS256Error);
           expect(error.message).toBe(
             "Invalid key ID (kid) for RS256 encoded JWT",
           );
@@ -391,7 +391,7 @@ describe("OAuth2Client", () => {
         );
 
         await oauthClient.verifyJWT(missingKidJWT, "RS256").catch((error) => {
-          expect(error).toBeInstanceOf(MissingKeyIDHS256);
+          expect(error).toBeInstanceOf(MissingKeyIDHS256Error);
           expect(error.message).toBe(
             "Missing key ID (kid) for RS256 encoded JWT",
           );
@@ -410,7 +410,7 @@ describe("OAuth2Client", () => {
         });
 
         await oauthClient.verifyJWT(noAlgoJWT, "RS256").catch((error) => {
-          expect(error).toBeInstanceOf(AlgoNotSupported);
+          expect(error).toBeInstanceOf(AlgoNotSupportedError);
           expect(error.message).toBe("Encoding algo not supported");
         });
       });

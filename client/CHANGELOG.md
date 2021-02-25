@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2021-02-24
+
+### Changes
+
+- 💥 Added the `Error` suffix to errors names.
+
+### Bumps
+
+```sh
+  eslint-config-prettier            dev     ~2mo     7.1.0  →     8.1.0   ⩽1d
+  @fewlines/eslint-config           dev     ~7mo     3.0.0  →     3.1.2   ~2d
+  @typescript-eslint/eslint-plugin  dev     ~2mo    4.11.0  →    4.15.2   ~3d
+  @typescript-eslint/parser         dev     ~2mo    4.11.0  →    4.15.2   ~3d
+  eslint                            dev     ~2mo    7.16.0  →    7.20.0  ~13d
+  ts-jest                           dev     ~4mo    26.4.4  →    26.5.2   ~2d
+  typescript                        dev     ~3mo     4.1.3  →     4.2.2   ~2d
+  @types/jest                       dev     ~3mo   26.0.19  →   26.0.20  ~2mo
+  @types/node                       dev     ~2mo  14.14.14  →  14.14.31   ~6d
+  @types/node-fetch                 dev    ~10mo     2.5.7  →     2.5.8  ~1mo
+  eslint-plugin-prettier            dev     ~2mo     3.3.0  →     3.3.1  ~2mo
+```
+
 ## [0.3.0] - 2021-02-15
 
 - Added retry of JWT verification to handle public key rotation.

@@ -29,10 +29,7 @@ function encodeLengthHex(n: number): string {
   return toHex(lengthOfLengthByte) + nHex;
 }
 
-export function rsaPublicKeyToPEM(
-  modulusB64: string,
-  exponentB64: string,
-): string {
+function rsaPublicKeyToPEM(modulusB64: string, exponentB64: string): string {
   const modulus = Buffer.from(modulusB64, "base64");
   const exponent = Buffer.from(exponentB64, "base64");
   const modulusHex = prepadSigned(modulus.toString("hex"));
@@ -61,3 +58,5 @@ export function rsaPublicKeyToPEM(
   pem += "\n-----END RSA PUBLIC KEY-----\n";
   return pem;
 }
+
+export { rsaPublicKeyToPEM };
