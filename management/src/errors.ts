@@ -57,6 +57,12 @@ class IdentityNotFoundError extends Error {
   readonly message = "Identity Not Found";
 }
 
+class UnhandledIdentityType extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
+
 export {
   ConnectUnreachableError,
   GraphqlError,
@@ -67,4 +73,5 @@ export {
   IdentityValueCantBeBlankError,
   InvalidValidationCodeError,
   IdentityNotFoundError,
+  UnhandledIdentityType,
 };

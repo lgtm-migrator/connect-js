@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.1] - 2021-02-24
+
+- Fixed Identity type in `updateIdentity`.
+
 ## [0.4.0] - 2021-02-22
 
 - Refactored `updateIdentity` props (cf. documentation).
