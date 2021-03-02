@@ -7,7 +7,7 @@ import {
   removeIdentityFromUser,
   sendIdentityValidationCode,
   updateProviderApplication,
-  updateIdentity,
+  updateIdentityFromUser,
 } from "../../index";
 
 describe("Commands", () => {
@@ -20,6 +20,6 @@ describe("Commands", () => {
     expect(removeIdentityFromUser).toBeInstanceOf(Function);
     expect(sendIdentityValidationCode).toBeInstanceOf(Function);
     expect(updateProviderApplication).toBeInstanceOf(Function);
-    expect(updateIdentity).toBeInstanceOf(Function);
+    expect(updateIdentityFromUser).toBeInstanceOf(Function);
   });
 });

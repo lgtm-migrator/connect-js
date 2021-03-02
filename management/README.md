@@ -191,13 +191,16 @@ const isPasswordSet = await isUserPasswordSet(
 
 ### addIdentityToUser
 
-Used to add a new Identity to the user. The function returns the newly added Identity.
+Used to add a new Identity to the user. It also allows the use of multiple event IDs. The function returns the newly added Identity.
 
 ```ts
 import { addIdentityToUser } from "@fewlines/connect-management";
 
 const input = {
-  userId: "d96ee314-31b2-4e19-88b7-63734b90d1d4",
+  userIds: [
+    "d96ee314-31b2-4e19-88b7-63734b90d1d4",
+    "5f42e01d-3b41-485e-8749-975cb693a3aa",
+  ],
   type: "EMAIL",
   value: "foo@fewlines.co",
 };
@@ -413,13 +416,13 @@ const {
 } = await updateProviderApplication(managementCredentials, input);
 ```
 
-### updateIdentity
+### updateIdentityFromUser
 
 Used to update an Identity. Here are the props needed, in order:
 
 - managementCredentials: URI and API Key of Connect.
 - userId: ID or sub of the current user.
-- eventId: Event ID generated at the start of the Identity validation flow.
+- eventIds: List of event ID generated at the start of the Identity validation flow, and populated when the user re-send a validation code.
 - validationCode: Code input from the User during the Identity validation flow.
 - identityValue: Identity value that will replace the current Identity.
 - identityToUpdateId: ID of the previous Identity to update.
@@ -427,17 +430,17 @@ Used to update an Identity. Here are the props needed, in order:
 ```ts
 import { updateIdentity } from "@fewlines/connect-management";
 
-await updateIdentity(
+await updateIdentityFromUser(
   managementCredentials,
   userId,
-  eventId,
+  eventIds,
   validationCode,
   identityValue,
   identityToUpdateId,
 );
 ```
 
-The function will do a rollback of any added Identity and primary Identity status in case of a failure.
+The function will do a rollback of any added Identity and primary Identity status in case of a failure. It also allows the use of multiple event IDs.
 
 Here are the expected exception raised in case of a failure:
 

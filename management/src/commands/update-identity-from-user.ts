@@ -1,5 +1,4 @@
-import { IdentityNotFoundError, InvalidValidationCodeError } from "../errors";
-import { checkVerificationCode } from "../queries/check-verification-code";
+import { IdentityNotFoundError } from "../errors";
 import { getIdentity } from "../queries/get-identity";
 import { ManagementCredentials } from "../types";
 import { getIdentityType } from "../utils/get-identity-type";
@@ -7,11 +6,11 @@ import { addIdentityToUser } from "./add-identity-to-user";
 import { markIdentityAsPrimary } from "./mark-identity-as-primary";
 import { removeIdentityFromUser } from "./remove-identity-from-user";
 
-async function updateIdentity(
+async function updateIdentityFromUser(
   managementCredentials: ManagementCredentials,
   userId: string,
   validationCode: string,
-  eventId: string,
+  eventIds: string[],
   identityValue: string,
   identityToUpdateId: string,
 ): Promise<void> {
@@ -24,23 +23,16 @@ async function updateIdentity(
     throw new IdentityNotFoundError();
   }
 
-  const { status: verificationStatus } = await checkVerificationCode(
+  const { id: identityId } = await addIdentityToUser(
     managementCredentials,
+    validationCode,
+    eventIds,
     {
-      code: validationCode,
-      eventId,
+      userId,
+      identityType: getIdentityType(identityToUpdate.type),
+      identityValue,
     },
   );
-
-  if (verificationStatus !== "VALID") {
-    throw new InvalidValidationCodeError();
-  }
-
-  const { id: identityId } = await addIdentityToUser(managementCredentials, {
-    userId,
-    identityType: getIdentityType(identityToUpdate.type),
-    identityValue,
-  });
 
   if (identityToUpdate.primary) {
     await markIdentityAsPrimary(managementCredentials, identityId).catch(
@@ -77,4 +69,4 @@ async function updateIdentity(
   });
 }
 
-export { updateIdentity };
+export { updateIdentityFromUser };

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2021-03-01
+
+- 💥 `addIdentityToUser` now takes a list of event IDs.
+- 💥 Renamed `updateIdentity` to `updateIdentityFromUser`, and it now takes a list of event IDs.
+
 ## [0.4.1] - 2021-02-24
 
 - Fixed Identity type in `updateIdentity`.
