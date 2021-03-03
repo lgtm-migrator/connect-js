@@ -12,6 +12,7 @@ import {
   ManagementCredentials,
   PasswordRules,
 } from "../types";
+import { flattenDeepObject } from "../utils/flatten-deep-object";
 
 const CREATE_OR_UPDATE_PASSWORD_MUTATION = gql`
   mutation createOrUpdatePassword($cleartextPassword: String!, $userId: ID!) {
@@ -44,9 +45,10 @@ async function createOrUpdatePassword(
     );
 
     if (passwordError) {
-      throw new InvalidPasswordInputError(
+      const formattedPasswordRules = flattenDeepObject(
         (passwordError as GraphQLError & { rules: PasswordRules }).rules,
       );
+      throw new InvalidPasswordInputError(formattedPasswordRules);
     }
 
     throw new GraphqlErrors(errors);

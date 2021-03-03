@@ -1,8 +1,6 @@
 import { GraphQLError } from "graphql";
 import { FetchError } from "node-fetch";
 
-import { PasswordRules } from "./types";
-
 class GraphqlError extends Error {
   parentError: GraphqlErrors;
 
@@ -24,9 +22,9 @@ class OutputDataNullError extends Error {
 }
 
 class InvalidPasswordInputError extends Error {
-  readonly rules: PasswordRules;
+  readonly rules: Record<string, string>;
 
-  constructor(rules: PasswordRules) {
+  constructor(rules: Record<string, string>) {
     super("Invalid Password Input");
     this.rules = rules;
   }

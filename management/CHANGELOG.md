@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.1] - 2021-03-03
+
+- Change of error data structure in `createOrUpdatePassword`.
+
 ## [0.5.0] - 2021-03-01
 
 - 💥 `addIdentityToUser` now takes a list of event IDs.

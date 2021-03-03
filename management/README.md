@@ -226,7 +226,7 @@ const isPasswordSet = await createOrUpdatePassword(
 );
 ```
 
-If the `cleartextPassword` input doesn't meet the Provider defined rules, the function will throw a specific error containing the `rules` waited for the password to be valid. The data structure of the `rules` property is dependent of the Provider settings.
+If the `cleartextPassword` input doesn't meet the Provider defined rules, the function will throw a specific error containing the `rules` waited for the password to be valid.
 
 ```ts
 import {
