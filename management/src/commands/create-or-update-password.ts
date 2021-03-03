@@ -25,7 +25,7 @@ const CREATE_OR_UPDATE_PASSWORD_MUTATION = gql`
   }
 `;
 
-export async function createOrUpdatePassword(
+async function createOrUpdatePassword(
   managementCredentials: ManagementCredentials,
   { cleartextPassword, userId }: CreateOrUpdatePasswordInput,
 ): Promise<boolean> {
@@ -58,3 +58,5 @@ export async function createOrUpdatePassword(
 
   return data.createOrUpdatePassword.passwords.available;
 }
+
+export { createOrUpdatePassword };

@@ -1,9 +1,9 @@
-export type ManagementCredentials = {
+type ManagementCredentials = {
   URI: string;
   APIKey: string;
 };
 
-export type ProviderApplication = {
+type ProviderApplication = {
   id: string;
   name: string;
   description: string;
@@ -11,7 +11,7 @@ export type ProviderApplication = {
   redirectUris: string[];
 };
 
-export type UpdateProviderApplicationInput = {
+type UpdateProviderApplicationInput = {
   id: string;
   name?: string;
   description?: string;
@@ -19,12 +19,12 @@ export type UpdateProviderApplicationInput = {
   redirectUris?: string[];
 };
 
-export type CreateUserWithIdentitiesInput = {
+type CreateUserWithIdentitiesInput = {
   identities: IdentityInput[];
   localeCode: string;
 };
 
-export enum IdentityTypes {
+enum IdentityTypes {
   APPLE = "APPLE",
   DECATHLON = "DECATHLON",
   EMAIL = "EMAIL",
@@ -42,18 +42,18 @@ export enum IdentityTypes {
   VKONTAKTE = "VKONTAKTE",
 }
 
-export enum IdentityStatus {
+enum IdentityStatus {
   UNVALIDATED = "UNVALIDATED",
   VALIDATED = "VALIDATED",
 }
 
-export type IdentityInput = {
+type IdentityInput = {
   status?: IdentityStatus;
   type: IdentityTypes;
   value: string;
 };
 
-export type Identity = {
+type Identity = {
   id: string;
   primary: boolean;
   status: "validated" | "unvalidated";
@@ -61,13 +61,13 @@ export type Identity = {
   value: string;
 };
 
-export type IdentityCommandInput = {
+type IdentityCommandInput = {
   userId: string;
   identityType: IdentityTypes;
   identityValue: string;
 };
 
-export type PasswordRules = {
+type PasswordRules = {
   min_digits: {
     error: boolean;
     minimum: number;
@@ -82,40 +82,58 @@ export type PasswordRules = {
   };
 };
 
-export type CreateOrUpdatePasswordInput = {
+type CreateOrUpdatePasswordInput = {
   cleartextPassword: string;
   userId: string;
 };
 
-export type SendIdentityVerificationCodeInput = {
+type SendIdentityVerificationCodeInput = {
   callbackUrl: string;
   identity: IdentityInput;
   localeCodeOverride?: string;
   userId?: string;
 };
 
-export type SendIdentityValidationCodeResult = {
+type SendIdentityValidationCodeResult = {
   callbackUrl: string;
   eventId: string;
   localeCode: string;
   nonce: string;
 };
 
-export type CheckVerificationCodeInput = {
+type CheckVerificationCodeInput = {
   code: string;
   eventId: string;
 };
 
-export enum CheckVerificationCodeStatus {
+enum CheckVerificationCodeStatus {
   EXPIRED = "EXPIRED",
   INVALID = "INVALID",
   NOT_FOUND = "NOT_FOUND",
   VALID = "VALID",
 }
 
-export type CheckVerificationCodeResult = {
+type CheckVerificationCodeResult = {
   identityType: IdentityTypes;
   identityValue: string;
   nonce: string;
   status: CheckVerificationCodeStatus;
 };
+
+export type {
+  ManagementCredentials,
+  ProviderApplication,
+  UpdateProviderApplicationInput,
+  CreateUserWithIdentitiesInput,
+  IdentityInput,
+  Identity,
+  IdentityCommandInput,
+  PasswordRules,
+  CreateOrUpdatePasswordInput,
+  SendIdentityVerificationCodeInput,
+  SendIdentityValidationCodeResult,
+  CheckVerificationCodeInput,
+  CheckVerificationCodeResult,
+};
+
+export { IdentityTypes, IdentityStatus, CheckVerificationCodeStatus };

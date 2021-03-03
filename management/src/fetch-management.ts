@@ -7,7 +7,7 @@ import { FetchError } from "node-fetch";
 import { ConnectUnreachableError } from "./errors";
 import { ManagementCredentials } from "./types";
 
-export async function fetchManagement<T = unknown>(
+async function fetchManagement<T = unknown>(
   managementCredentials: ManagementCredentials,
   operation: GraphQLRequest,
 ): Promise<FetchResult<T>> {
@@ -36,3 +36,5 @@ export async function fetchManagement<T = unknown>(
     throw error;
   }
 }
+
+export { fetchManagement };

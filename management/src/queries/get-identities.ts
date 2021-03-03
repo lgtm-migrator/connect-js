@@ -20,7 +20,7 @@ const GET_USER_IDENTITIES_QUERY = gql`
   }
 `;
 
-export async function getIdentities(
+async function getIdentities(
   managementCredentials: ManagementCredentials,
   userId: string,
 ): Promise<Identity[]> {
@@ -47,3 +47,5 @@ export async function getIdentities(
 
   return data.provider.user.identities;
 }
+
+export { getIdentities };

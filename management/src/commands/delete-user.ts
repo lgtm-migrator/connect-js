@@ -12,7 +12,7 @@ const DELETE_USER_MUTATION = gql`
   }
 `;
 
-export async function deleteUser(
+async function deleteUser(
   managementCredentials: ManagementCredentials,
   userId: string,
 ): Promise<{ status: string }> {
@@ -37,3 +37,5 @@ export async function deleteUser(
 
   return data.deleteUser;
 }
+
+export { deleteUser };

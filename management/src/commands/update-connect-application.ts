@@ -32,7 +32,7 @@ const UPDATE_APPLICATION_MUTATION = gql`
   }
 `;
 
-export async function updateProviderApplication(
+async function updateProviderApplication(
   managementCredentials: ManagementCredentials,
   {
     id,
@@ -77,3 +77,5 @@ export async function updateProviderApplication(
 
   return data.updateApplication;
 }
+
+export { updateProviderApplication };

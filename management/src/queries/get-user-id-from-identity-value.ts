@@ -14,7 +14,7 @@ const GET_USER_ID_FROM_IDENTITY_VALUE_QUERY = gql`
   }
 `;
 
-export async function getUserIdFromIdentityValue(
+async function getUserIdFromIdentityValue(
   managementCredentials: ManagementCredentials,
   identityValue: string,
 ): Promise<string> {
@@ -41,3 +41,5 @@ export async function getUserIdFromIdentityValue(
 
   return data.provider.user.id;
 }
+
+export { getUserIdFromIdentityValue };

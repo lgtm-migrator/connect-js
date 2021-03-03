@@ -16,7 +16,7 @@ const IS_USER_PASSWORD_SET_QUERY = gql`
   }
 `;
 
-export async function isUserPasswordSet(
+async function isUserPasswordSet(
   managementCredentials: ManagementCredentials,
   userId: string,
 ): Promise<boolean> {
@@ -45,3 +45,5 @@ export async function isUserPasswordSet(
 
   return data.provider.user.passwords.available;
 }
+
+export { isUserPasswordSet };

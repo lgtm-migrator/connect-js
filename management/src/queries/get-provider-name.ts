@@ -12,7 +12,7 @@ const GET_PROVIDER_NAME_QUERY = gql`
   }
 `;
 
-export async function getProviderName(
+async function getProviderName(
   managementCredentials: ManagementCredentials,
 ): Promise<string> {
   const operation = {
@@ -34,3 +34,5 @@ export async function getProviderName(
 
   return data.provider.name;
 }
+
+export { getProviderName };

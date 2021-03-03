@@ -20,12 +20,12 @@ const GET_USER_IDENTITY_QUERY = gql`
   }
 `;
 
-export type GetIdentityInput = {
+type GetIdentityInput = {
   userId: string;
   identityId: string;
 };
 
-export async function getIdentity(
+async function getIdentity(
   managementCredentials: ManagementCredentials,
   { userId, identityId }: GetIdentityInput,
 ): Promise<Identity | null> {
@@ -52,3 +52,6 @@ export async function getIdentity(
 
   return data.provider.user.identity;
 }
+
+export { getIdentity };
+export type { GetIdentityInput };

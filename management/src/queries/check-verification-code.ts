@@ -19,7 +19,7 @@ const CHECK_VERIFICATION_CODE_QUERY = gql`
   }
 `;
 
-export async function checkVerificationCode(
+async function checkVerificationCode(
   managementCredentials: ManagementCredentials,
   { code, eventId }: CheckVerificationCodeInput,
 ): Promise<CheckVerificationCodeResult> {
@@ -42,3 +42,5 @@ export async function checkVerificationCode(
 
   return data.checkVerificationCode;
 }
+
+export { checkVerificationCode };

@@ -24,7 +24,7 @@ const REMOVE_IDENTITY_FROM_USER = gql`
   }
 `;
 
-export async function removeIdentityFromUser(
+async function removeIdentityFromUser(
   managementCredentials: ManagementCredentials,
   { userId, identityType, identityValue }: IdentityCommandInput,
 ): Promise<boolean> {
@@ -47,3 +47,5 @@ export async function removeIdentityFromUser(
 
   return true;
 }
+
+export { removeIdentityFromUser };

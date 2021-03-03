@@ -16,7 +16,7 @@ const MARK_IDENTITY_AS_PRIMARY_MUTATION = gql`
   }
 `;
 
-export async function markIdentityAsPrimary(
+async function markIdentityAsPrimary(
   managementCredentials: ManagementCredentials,
   identityId: Identity["id"],
 ): Promise<Identity> {
@@ -39,3 +39,5 @@ export async function markIdentityAsPrimary(
 
   return data.markIdentityAsPrimary;
 }
+
+export { markIdentityAsPrimary };

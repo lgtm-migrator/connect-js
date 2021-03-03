@@ -19,7 +19,7 @@ const GET_APPLICATION_QUERY = gql`
   }
 `;
 
-export async function getProviderApplication(
+async function getProviderApplication(
   managementCredentials: ManagementCredentials,
   connectApplicationId: string,
 ): Promise<ProviderApplication> {
@@ -42,3 +42,5 @@ export async function getProviderApplication(
 
   return data.provider.application;
 }
+
+export { getProviderApplication };

@@ -37,7 +37,7 @@ const SEND_IDENTITY_VALIDATION_CODE_MUTATION = gql`
   }
 `;
 
-export async function sendIdentityValidationCode(
+async function sendIdentityValidationCode(
   managementCredentials: ManagementCredentials,
   {
     callbackUrl,
@@ -90,3 +90,5 @@ export async function sendIdentityValidationCode(
 
   return data.sendIdentityValidationCode;
 }
+
+export { sendIdentityValidationCode };

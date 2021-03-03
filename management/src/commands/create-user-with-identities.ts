@@ -17,7 +17,7 @@ const CREATE_USER_WITH_IDENTITIES_MUTATION = gql`
   }
 `;
 
-export async function createUserWithIdentities(
+async function createUserWithIdentities(
   managementCredentials: ManagementCredentials,
   { identities, localeCode }: CreateUserWithIdentitiesInput,
 ): Promise<string> {
@@ -40,3 +40,5 @@ export async function createUserWithIdentities(
 
   return data.createUserWithIdentities.id;
 }
+
+export { createUserWithIdentities };
