@@ -3,25 +3,25 @@ import gql from "graphql-tag";
 
 import {
   GraphqlErrors,
-  IdentityAlreadyUsedError,
-  IdentityValueCantBeBlankError,
+  IdentityNotFoundError,
+  InvalidIdentityTypeError,
   OutputDataNullError,
 } from "../errors";
 import { fetchManagement } from "../fetch-management";
 import {
   ManagementCredentials,
-  SendIdentityValidationCodeResult,
-  SendIdentityValidationCodeInput,
+  Send2FaVerificationCodeInput,
+  Send2FaVerificationCodeResult,
 } from "../types";
 
-const SEND_IDENTITY_VALIDATION_CODE_MUTATION = gql`
-  mutation sendIdentityValidationCode(
+const SEND_2FA_VERIFICATION_CODE_MUTATION = gql`
+  mutation send2FaVerificationCode(
     $callbackUrl: String!
     $identity: IdentityInput!
     $localeCodeOverride: String
     $userId: String
   ) {
-    sendIdentityValidationCode(
+    sendPhoneVerificationCode(
       input: {
         callbackUrl: $callbackUrl
         identity: $identity
@@ -37,58 +37,60 @@ const SEND_IDENTITY_VALIDATION_CODE_MUTATION = gql`
   }
 `;
 
-async function sendIdentityValidationCode(
+async function send2FaVerificationCode(
   managementCredentials: ManagementCredentials,
   {
     callbackUrl,
     identity,
-    localeCodeOverride,
     userId,
-  }: SendIdentityValidationCodeInput,
-): Promise<SendIdentityValidationCodeResult> {
+    localeCodeOverride,
+  }: Send2FaVerificationCodeInput,
+): Promise<Send2FaVerificationCodeResult> {
   const operation = {
-    query: SEND_IDENTITY_VALIDATION_CODE_MUTATION,
+    query: SEND_2FA_VERIFICATION_CODE_MUTATION,
     variables: {
       callbackUrl,
       identity,
-      localeCodeOverride,
       userId,
+      localeCodeOverride,
     },
   };
 
   const { data, errors } = await fetchManagement<{
-    sendIdentityValidationCode: SendIdentityValidationCodeResult;
+    sendPhoneVerificationCode: Send2FaVerificationCodeResult;
   }>(managementCredentials, operation);
 
   if (errors) {
-    const identityAlreadyUsedError = errors.find(
+    const invalidIdentityTypeError = errors.find(
       (error) =>
-        (error as GraphQLError & { code: string }).code ===
-        "identity_already_validated",
+        (error as GraphQLError & {
+          code: string;
+          errors: Record<string, unknown>;
+        }).code === "validation_error",
     );
 
-    if (identityAlreadyUsedError) {
-      throw new IdentityAlreadyUsedError();
+    if (invalidIdentityTypeError) {
+      throw new InvalidIdentityTypeError();
     } else {
-      const identityValueError = errors.find(
+      const identityNotFound = errors.find(
         (error) =>
           (error as GraphQLError & { errors: { identity_value: string } })
             .errors.identity_value === "can't be blank",
       );
 
-      if (identityValueError) {
-        throw new IdentityValueCantBeBlankError();
+      if (identityNotFound) {
+        throw new IdentityNotFoundError();
       }
     }
 
     throw new GraphqlErrors(errors);
   }
 
-  if (!data.sendIdentityValidationCode) {
+  if (!data.sendPhoneVerificationCode) {
     throw new OutputDataNullError();
   }
 
-  return data.sendIdentityValidationCode;
+  return data.sendPhoneVerificationCode;
 }
 
-export { sendIdentityValidationCode };
+export { send2FaVerificationCode };

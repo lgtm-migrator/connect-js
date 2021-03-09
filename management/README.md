@@ -320,7 +320,7 @@ const isIdentityRemove = await removeIdentityFromUser(
 
 ### sendIdentityValidationCode
 
-Used to send a Validation Code to the User. The function returns an object, composed of:
+Used to send an Identity Validation Code to the User. The function returns an object, composed of:
 
 - The event id, used to verify the Validation Code.
 - The callback URL
@@ -449,3 +449,74 @@ Here are the expected exception raised in case of a failure:
 - IdentityNotFoundError
 - InvalidValidationCodeError
 - UnhandledIdentityType
+
+### send2FaVerificationCode
+
+Used to send a Verification Code to the User. The function returns an object, composed of:
+
+- The event id associated with the Verification Code.
+- The callback URL
+- The locale code
+- The nonce
+
+```ts
+import { send2FaVerificationCode } from "@fewlines/connect-management";
+
+const input = {
+  callbackUrl: "/",
+  identity: {
+    id: "12488dfe-8e46-4391-a8bb-f0db41078942",
+    type: "PHONE",
+    value: "+33642424242",
+    status: "validated",
+    primary: true,
+  },
+  userId: "37b21863-3f38-4d20-848d-3108337a0b8b",
+};
+
+const {
+  callbackUrl,
+  localeCode,
+  eventId,
+  nonce,
+} = await send2FaVerificationCode(managementCredentials, input);
+```
+
+If the Identity `type` isn't a valid one or if the provided Identity is not associated with the `userId`, the function will throw specific errors corresponding to each case.
+
+```ts
+import {
+  send2FaVerificationCode,
+  InvalidIdentityTypeError,
+  IdentityNotFoundError,
+} from "@fewlines/connect-management";
+
+const input = {
+  callbackUrl: "/",
+  identity: {
+    id: "12488dfe-8e46-4391-a8bb-f0db41078942",
+    type: "EMAIL",
+    value: "foo@fewlines.co",
+    status: "validated",
+    primary: true,
+  },
+  userId: "37b21863-3f38-4d20-848d-3108337a0b8b",
+};
+
+try {
+  const {
+    callbackUrl,
+    localeCode,
+    eventId,
+    nonce,
+  } = await send2FaVerificationCode(managementCredentials, input);
+} catch (error) {
+  if (error instanceof InvalidIdentityTypeError) {
+    // ...
+  }
+
+  if (error instanceof IdentityNotFoundError) {
+    // ...
+  }
+}
+```

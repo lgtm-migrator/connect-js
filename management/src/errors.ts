@@ -61,6 +61,10 @@ class UnhandledIdentityType extends Error {
   }
 }
 
+class InvalidIdentityTypeError extends Error {
+  readonly message = "Invalid identity type";
+}
+
 export {
   ConnectUnreachableError,
   GraphqlError,
@@ -72,4 +76,5 @@ export {
   InvalidValidationCodeError,
   IdentityNotFoundError,
   UnhandledIdentityType,
+  InvalidIdentityTypeError,
 };

@@ -87,7 +87,7 @@ type CreateOrUpdatePasswordInput = {
   userId: string;
 };
 
-type SendIdentityVerificationCodeInput = {
+type SendIdentityValidationCodeInput = {
   callbackUrl: string;
   identity: IdentityInput;
   localeCodeOverride?: string;
@@ -120,6 +120,20 @@ type CheckVerificationCodeResult = {
   status: CheckVerificationCodeStatus;
 };
 
+type Send2FaVerificationCodeInput = {
+  callbackUrl: string;
+  identity: IdentityInput;
+  userId: string;
+  localeCodeOverride?: string;
+};
+
+type Send2FaVerificationCodeResult = {
+  callbackUrl: string;
+  eventId: string;
+  localeCode: string;
+  nonce: string;
+};
+
 export type {
   ManagementCredentials,
   ProviderApplication,
@@ -130,10 +144,12 @@ export type {
   IdentityCommandInput,
   PasswordRules,
   CreateOrUpdatePasswordInput,
-  SendIdentityVerificationCodeInput,
+  SendIdentityValidationCodeInput,
   SendIdentityValidationCodeResult,
   CheckVerificationCodeInput,
   CheckVerificationCodeResult,
+  Send2FaVerificationCodeResult,
+  Send2FaVerificationCodeInput,
 };
 
 export { IdentityTypes, IdentityStatus, CheckVerificationCodeStatus };
