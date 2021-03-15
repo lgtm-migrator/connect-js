@@ -8,7 +8,7 @@ import {
   sendIdentityValidationCode,
   updateProviderApplication,
   updateIdentityFromUser,
-  send2FaVerificationCode,
+  sendTwoFAVerificationCode,
 } from "../../index";
 
 describe("Commands", () => {
@@ -22,6 +22,6 @@ describe("Commands", () => {
     expect(sendIdentityValidationCode).toBeInstanceOf(Function);
     expect(updateProviderApplication).toBeInstanceOf(Function);
     expect(updateIdentityFromUser).toBeInstanceOf(Function);
-    expect(send2FaVerificationCode).toBeInstanceOf(Function);
+    expect(sendTwoFAVerificationCode).toBeInstanceOf(Function);
   });
 });

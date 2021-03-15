@@ -120,14 +120,14 @@ type CheckVerificationCodeResult = {
   status: CheckVerificationCodeStatus;
 };
 
-type Send2FaVerificationCodeInput = {
+type SendTwoFAVerificationCodeInput = {
   callbackUrl: string;
   identity: IdentityInput;
   userId: string;
   localeCodeOverride?: string;
 };
 
-type Send2FaVerificationCodeResult = {
+type SendTwoFAVerificationCodeResult = {
   callbackUrl: string;
   eventId: string;
   localeCode: string;
@@ -148,8 +148,8 @@ export type {
   SendIdentityValidationCodeResult,
   CheckVerificationCodeInput,
   CheckVerificationCodeResult,
-  Send2FaVerificationCodeResult,
-  Send2FaVerificationCodeInput,
+  SendTwoFAVerificationCodeResult,
+  SendTwoFAVerificationCodeInput,
 };
 
 export { IdentityTypes, IdentityStatus, CheckVerificationCodeStatus };

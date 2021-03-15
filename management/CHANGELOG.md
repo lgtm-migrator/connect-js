@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.1] - 2021-03-15
+
+- 💥 Changed the naming of `send2FaVerificationCode` function to `sendTwoFAVerificationCode`.
+
 ## [0.6.0] - 2021-03-09
 
 - New function called `send2FaVerificationCode`, that can be used to send a verification code to a User.

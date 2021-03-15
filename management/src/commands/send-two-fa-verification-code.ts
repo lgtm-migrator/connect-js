@@ -10,12 +10,12 @@ import {
 import { fetchManagement } from "../fetch-management";
 import {
   ManagementCredentials,
-  Send2FaVerificationCodeInput,
-  Send2FaVerificationCodeResult,
+  SendTwoFAVerificationCodeInput,
+  SendTwoFAVerificationCodeResult,
 } from "../types";
 
-const SEND_2FA_VERIFICATION_CODE_MUTATION = gql`
-  mutation send2FaVerificationCode(
+const SEND_TWO_FA_VERIFICATION_CODE_MUTATION = gql`
+  mutation sendTwoFAVerificationCode(
     $callbackUrl: String!
     $identity: IdentityInput!
     $localeCodeOverride: String
@@ -37,17 +37,17 @@ const SEND_2FA_VERIFICATION_CODE_MUTATION = gql`
   }
 `;
 
-async function send2FaVerificationCode(
+async function sendTwoFAVerificationCode(
   managementCredentials: ManagementCredentials,
   {
     callbackUrl,
     identity,
     userId,
     localeCodeOverride,
-  }: Send2FaVerificationCodeInput,
-): Promise<Send2FaVerificationCodeResult> {
+  }: SendTwoFAVerificationCodeInput,
+): Promise<SendTwoFAVerificationCodeResult> {
   const operation = {
-    query: SEND_2FA_VERIFICATION_CODE_MUTATION,
+    query: SEND_TWO_FA_VERIFICATION_CODE_MUTATION,
     variables: {
       callbackUrl,
       identity,
@@ -57,7 +57,7 @@ async function send2FaVerificationCode(
   };
 
   const { data, errors } = await fetchManagement<{
-    sendPhoneVerificationCode: Send2FaVerificationCodeResult;
+    sendPhoneVerificationCode: SendTwoFAVerificationCodeResult;
   }>(managementCredentials, operation);
 
   if (errors) {
@@ -93,4 +93,4 @@ async function send2FaVerificationCode(
   return data.sendPhoneVerificationCode;
 }
 
-export { send2FaVerificationCode };
+export { sendTwoFAVerificationCode };
