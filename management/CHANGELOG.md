@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.2] - 2021-03-24
+
+- Fixed `getUserIdFromIdentityValue`.
+
 ## [0.6.1] - 2021-03-15
 
 - 💥 Changed the naming of `send2FaVerificationCode` function to `sendTwoFAVerificationCode`.

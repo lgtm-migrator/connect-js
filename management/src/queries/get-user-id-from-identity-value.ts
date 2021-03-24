@@ -5,9 +5,9 @@ import { fetchManagement } from "../fetch-management";
 import { ManagementCredentials } from "../types";
 
 const GET_USER_ID_FROM_IDENTITY_VALUE_QUERY = gql`
-  query getUser($identities: IdentityInput!) {
+  query getUser($value: String!) {
     provider {
-      user(filters: { identities: $identities }) {
+      user(filters: { identities: { value: $value } }) {
         id
       }
     }
