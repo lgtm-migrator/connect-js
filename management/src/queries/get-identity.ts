@@ -1,6 +1,10 @@
 import gql from "graphql-tag";
 
-import { GraphqlErrors, OutputDataNullError } from "../errors";
+import {
+  GraphqlErrors,
+  IdentityNotFoundError,
+  OutputDataNullError,
+} from "../errors";
 import { fetchManagement } from "../fetch-management";
 import { Identity, ManagementCredentials } from "../types";
 
@@ -43,6 +47,14 @@ async function getIdentity(
   }>(managementCredentials, operation);
 
   if (errors) {
+    const isIdentityNotFoundError = errors.some((error) => {
+      return error.message === "identity not found";
+    });
+
+    if (isIdentityNotFoundError) {
+      throw new IdentityNotFoundError();
+    }
+
     throw new GraphqlErrors(errors);
   }
 

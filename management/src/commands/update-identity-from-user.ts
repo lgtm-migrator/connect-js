@@ -1,4 +1,3 @@
-import { IdentityNotFoundError } from "../errors";
 import { getIdentity } from "../queries/get-identity";
 import { ManagementCredentials } from "../types";
 import { getIdentityType } from "../utils/get-identity-type";
@@ -18,10 +17,6 @@ async function updateIdentityFromUser(
     userId,
     identityId: identityToUpdateId,
   });
-
-  if (!identityToUpdate) {
-    throw new IdentityNotFoundError();
-  }
 
   const { id: identityId } = await addIdentityToUser(
     managementCredentials,
