@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [0.6.3] - 2021-04-09
 
-- `getIdentity` now throws `NotIdentityFoundError` if no Identity is found.
+- `getIdentity` now throws `IdentityNotFoundError` if no Identity is found.
 
 ## [0.6.2] - 2021-03-24
 
