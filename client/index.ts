@@ -218,6 +218,10 @@ class OAuth2Client {
     )
       .then((response) => response.json())
       .catch((error) => {
+        if (error instanceof FetchError) {
+          throw new UnreachableError(error);
+        }
+
         throw error;
       });
 

@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.2] - 2021-04-12
+
+### Changes
+
+- `getTokensFromAuthorizationCode` now throws an `UnreachableError` in case of a `FetchError`.
+
+### Bumps
+
+```sh
+  @typescript-eslint/eslint-plugin  dev     ~2mo    4.15.2  →    4.21.0   ~7d
+  @typescript-eslint/parser         dev     ~2mo    4.15.2  →    4.21.0   ~7d
+  eslint                            dev     ~2mo    7.20.0  →    7.24.0   ~2d
+  @types/jest                       dev     ~3mo   26.0.20  →   26.0.22  ~18d
+  @types/jsonwebtoken               dev    ~11mo     8.5.0  →     8.5.1  ~27d
+  @types/node                       dev     ~2mo  14.14.31  →  14.14.37  ~16d
+  @types/node-fetch                 dev     ~3mo     2.5.8  →    2.5.10   ~4d
+  ts-jest                           dev     ~2mo    26.5.2  →    26.5.4  ~26d
+  typescript                        dev     ~2mo     4.2.2  →     4.2.4   ~5d
+```
+
 ## [0.4.1] - 2021-02-25
 
 - `UnreachableError` exported.
