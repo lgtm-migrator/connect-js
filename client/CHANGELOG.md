@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2021-04-19
+
+- New method to fetch Provider's `/userinfo` endpoint (`getUserInfo`).
+
 ## [0.4.2] - 2021-04-12
 
 ### Changes
@@ -113,7 +117,7 @@ All notable changes to this project will be documented in this file.
 
 #### Major
 
-```
+```sh
   @typescript-eslint/eslint-plugin  dev    ~3mo  3.10.1  →  4.9.0   ~7d
   @typescript-eslint/parser         dev    ~3mo  3.10.1  →  4.9.0   ~7d
   eslint-config-prettier            dev    ~1mo  6.15.0  →  7.0.0   ~2d
@@ -123,7 +127,7 @@ All notable changes to this project will be documented in this file.
 
 #### Minor
 
-```
+```sh
   @types/node                       dev     ~5mo  14.0.26  →  14.14.10  ~12d
   @typescript-eslint/eslint-plugin  dev     ~5mo    3.7.0  →    3.10.1  ~3mo
   @typescript-eslint/parser         dev     ~5mo    3.7.0  →    3.10.1  ~3mo

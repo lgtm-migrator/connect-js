@@ -207,7 +207,7 @@ class OAuth2Client {
     };
 
     const tokenEndpointResponse = await this.fetch(
-      openIDConfiguration.token_endpoint,
+      openIDConfiguration.userinfo_endpoint,
       {
         method: "POST",
         headers: {
@@ -305,6 +305,25 @@ class OAuth2Client {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams(payload),
+    })
+      .then((response) => response.json())
+      .catch((error) => {
+        if (error instanceof FetchError) {
+          throw new UnreachableError(error);
+        }
+
+        throw error;
+      });
+  }
+
+  async getUserInfo(accessToken: string): Promise<Record<string, unknown>> {
+    const openIDConfiguration = await this.getOpenIDConfiguration();
+
+    return await this.fetch(openIDConfiguration.userinfo_endpoint, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
     })
       .then((response) => response.json())
       .catch((error) => {

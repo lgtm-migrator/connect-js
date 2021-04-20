@@ -74,7 +74,7 @@ const tokens = await oauthClient.getTokensFromAuthorizationCode(
 ### verifyJWT
 
 ```typescript
-async verifyJWT<T = unknown>(accessToken: string, algo: string): Promise<T> {};
+async verifyJWT<T = unknown>(accessToken: string, algo: string): Promise<T> {}
 ```
 
 Used to verify the JWS (i.e. `access_token`). It provides a series of checks, like audiences, algorithm or public key.
@@ -115,8 +115,22 @@ Returns a refreshed `access_token` along with a new `refresh_token`.
 
 ```typescript
 const { refresh_token, access_token } = await oauthClient.refreshTokens(
-  "refresh_token",
+  refresh_token,
 );
+```
+
+### getUserInfo
+
+**_ This method is still a work in progress _**
+
+```typescript
+async getUserInfo(accessToken: string): Promise<Record<string, unknown>>
+```
+
+Returns the JSON response from the Provider's `/userinfo` endpoint fetching, concerning the user associated with the `access_token` provided in parameter.
+
+```typescript
+const userInfoResponse = await oauthClient.getUserInfo(accessToken);
 ```
 
 ## Utils
