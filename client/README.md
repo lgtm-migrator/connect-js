@@ -124,13 +124,16 @@ const { refresh_token, access_token } = await oauthClient.refreshTokens(
 **_ This method is still a work in progress _**
 
 ```typescript
-async getUserInfo(accessToken: string): Promise<Record<string, unknown>>
+async getUserInfo<T = Record<string, unknown>>(accessToken: string): Promise<T>
 ```
 
 Returns the JSON response from the Provider's `/userinfo` endpoint fetching, concerning the user associated with the `access_token` provided in parameter.
 
 ```typescript
-const userInfoResponse = await oauthClient.getUserInfo(accessToken);
+const userInfoResponse = await oauthClient.getUserInfo<{
+  email: string;
+  phone_number: string;
+}>(accessToken);
 ```
 
 ## Utils

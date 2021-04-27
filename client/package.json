@@ -1,6 +1,6 @@
 {
   "name": "@fewlines/connect-client",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "author": "Fewlines",
   "description": "OAuth2 Client for the Connect JS SDK",
   "license": "MIT",

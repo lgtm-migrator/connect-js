@@ -316,7 +316,9 @@ class OAuth2Client {
       });
   }
 
-  async getUserInfo(accessToken: string): Promise<Record<string, unknown>> {
+  async getUserInfo<T = Record<string, unknown>>(
+    accessToken: string,
+  ): Promise<T> {
     const openIDConfiguration = await this.getOpenIDConfiguration();
 
     return await this.fetch(openIDConfiguration.userinfo_endpoint, {
