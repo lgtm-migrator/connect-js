@@ -161,6 +161,20 @@ If used without any argument, the function will return a default **RS256 JWS** c
 
 You can give a custom **secret** for signature, and/or a custom payload to customize your **RS256 JWS**.
 
+### generateJWE
+
+```typescript
+import { generateJWE } from "@fewlines/connect-client"
+
+await generateJWE(
+  JWTPayload: JWTPayload,
+  publicKeyForEncryption: string,
+  options?: { secretKey?: string; privateKeyForSignature?: string }
+): Promise<string> {};
+```
+
+This function takes as arguments a JWT payload, a RSA public key for encryption, and an optional object, `options`, containing either a secret key for signing a HS256 JWS, or a RSA private key for signing a RS256 JWS before encrypting it. It will then return a JWE based on a non-signed JWT or a JWS, according to arguments provided.
+
 ### default JWS composition objects
 
 The following exported objects are used when generating a **JWS** using `generateHS256JWS` and `generateHS256JWS`, while no arguments are passed:

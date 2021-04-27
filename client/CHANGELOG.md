@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.4] - 2021-04-26
+
+- Fixed an issue with `getTokensFromAuthorizationCode`.
+- Added a new util function to generate JWE (`generateJWE`).
+
 ## [0.4.3] - 2021-04-19
 
 - New method to fetch Provider's `/userinfo` endpoint (`getUserInfo`).
@@ -106,8 +111,8 @@ All notable changes to this project will be documented in this file.
 ### Changes
 
 - Added two new functions to generate JWS:
-  - generateHS256JWS
-  - generateRS256JWS
+  - `generateHS256JWS`
+  - `generateRS256JWS`
 - The package now export the following default object to help tests writing:
   - `defaultPayload` - Default JWT payload.
   - `asymmetricAlgoKeyPair` - Default pair of private and public key used for **RS256**.

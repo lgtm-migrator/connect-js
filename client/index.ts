@@ -207,7 +207,7 @@ class OAuth2Client {
     };
 
     const tokenEndpointResponse = await this.fetch(
-      openIDConfiguration.userinfo_endpoint,
+      openIDConfiguration.token_endpoint,
       {
         method: "POST",
         headers: {
