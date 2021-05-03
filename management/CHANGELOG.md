@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.4] - 2021-05-03
+
+- `sendTwoFAVerificationCode` can now be used with identity types `EMAIL` and `PHONE` rather than throwing an `invalid identity type` with `EMAIL`.
+
 ## [0.6.3] - 2021-04-09
 
 - `getIdentity` now throws `IdentityNotFoundError` if no Identity is found.
