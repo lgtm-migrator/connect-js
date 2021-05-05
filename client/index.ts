@@ -26,6 +26,7 @@ import {
   defaultPayload,
   defaultSecret,
 } from "./src/utils/defaultObjects";
+import { generateJWE } from "./src/utils/generateJWE";
 import { generateHS256JWS, generateRS256JWS } from "./src/utils/generateJWS";
 import { rsaPublicKeyToPEM } from "./src/utils/rsaPublicKeyToPEM";
 
@@ -355,6 +356,7 @@ export {
   OAuth2Tokens,
   JWTPayload,
   CustomPayload,
+  generateJWE,
   generateHS256JWS,
   generateRS256JWS,
   defaultPayload,
