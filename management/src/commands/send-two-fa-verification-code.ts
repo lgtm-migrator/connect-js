@@ -27,10 +27,12 @@ type TwoFAFunction = (
 function handleErrors(errors: readonly GraphQLError[]): void {
   const invalidIdentityTypeError = errors.find(
     (error) =>
-      (error as GraphQLError & {
-        code: string;
-        errors: Record<string, unknown>;
-      }).code === "validation_error",
+      (
+        error as GraphQLError & {
+          code: string;
+          errors: Record<string, unknown>;
+        }
+      ).code === "validation_error",
   );
 
   if (invalidIdentityTypeError) {

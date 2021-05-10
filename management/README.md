@@ -93,12 +93,8 @@ const input = {
   eventId: "ec1ee772-3249-4e5a-ad85-2b18d13f6f73",
 };
 
-const {
-  identityType,
-  identityValue,
-  nonce,
-  status,
-} = await checkVerificationCode(managementCredentials, input);
+const { identityType, identityValue, nonce, status } =
+  await checkVerificationCode(managementCredentials, input);
 ```
 
 ### getProviderApplication
@@ -108,16 +104,11 @@ Used to get the information from the Connect Application. The function returns t
 ```ts
 import { getProviderApplication } from "@fewlines/connect-management";
 
-const {
-  id,
-  defaultHomePage,
-  redirectUris,
-  name,
-  description,
-} = await getProviderApplication(
-  managementCredentials,
-  "a3e64872-6326-4813-948d-db8d8fc81bc8",
-);
+const { id, defaultHomePage, redirectUris, name, description } =
+  await getProviderApplication(
+    managementCredentials,
+    "a3e64872-6326-4813-948d-db8d8fc81bc8",
+  );
 ```
 
 ### getIdentities
@@ -342,12 +333,8 @@ const input = {
   userId: "37b21863-3f38-4d20-848d-3108337a0b8b",
 };
 
-const {
-  callbackUrl,
-  localeCode,
-  eventId,
-  nonce,
-} = await sendIdentityValidationCode(managementCredentials, input);
+const { callbackUrl, localeCode, eventId, nonce } =
+  await sendIdentityValidationCode(managementCredentials, input);
 ```
 
 If the Identity `value` input is blank or is identical to an already validated Identity for the current Provider, the function will throw specific errors corresponding to each case.
@@ -372,12 +359,8 @@ const input = {
 };
 
 try {
-  const {
-    callbackUrl,
-    localeCode,
-    eventId,
-    nonce,
-  } = await sendIdentityValidationCode(managementCredentials, input);
+  const { callbackUrl, localeCode, eventId, nonce } =
+    await sendIdentityValidationCode(managementCredentials, input);
 } catch (error) {
   if (error instanceof IdentityValueCantBeBlankError) {
     // ...
@@ -407,13 +390,8 @@ const input = {
   defaultHomePage: "https://www.fewlines.co",
 };
 
-const {
-  id,
-  description,
-  redirectUris,
-  name,
-  defaultHomePage,
-} = await updateProviderApplication(managementCredentials, input);
+const { id, description, redirectUris, name, defaultHomePage } =
+  await updateProviderApplication(managementCredentials, input);
 ```
 
 ### updateIdentityFromUser
@@ -474,12 +452,8 @@ const input = {
   userId: "37b21863-3f38-4d20-848d-3108337a0b8b",
 };
 
-const {
-  callbackUrl,
-  localeCode,
-  eventId,
-  nonce,
-} = await sendTwoFAVerificationCode(managementCredentials, input);
+const { callbackUrl, localeCode, eventId, nonce } =
+  await sendTwoFAVerificationCode(managementCredentials, input);
 ```
 
 If the Identity `type` isn't a valid one or if the provided Identity is not associated with the `userId`, the function will throw specific errors corresponding to each case.
@@ -504,12 +478,8 @@ const input = {
 };
 
 try {
-  const {
-    callbackUrl,
-    localeCode,
-    eventId,
-    nonce,
-  } = await sendTwoFAVerificationCode(managementCredentials, input);
+  const { callbackUrl, localeCode, eventId, nonce } =
+    await sendTwoFAVerificationCode(managementCredentials, input);
 } catch (error) {
   if (error instanceof InvalidIdentityTypeError) {
     // ...

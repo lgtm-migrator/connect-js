@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.5] - 2021-05-10
+
+- Bumped dependencies.
+
+```sh
+  @types/node                       dev     ~5mo  14.14.14  →   15.0.2   ~6d
+  eslint-config-prettier            dev     ~5mo     7.1.0  →    8.3.0  ~16d
+  cross-fetch                               ~8mo     3.0.6  →    3.1.4  ~1mo
+  graphql                                   ~7mo    15.4.0  →   15.5.0  ~3mo
+  graphql-tag                              ~10mo    2.11.0  →   2.12.4  ~11d
+  @typescript-eslint/eslint-plugin  dev     ~5mo    4.11.0  →   4.22.1   ~6d
+  @typescript-eslint/parser         dev     ~5mo    4.11.0  →   4.22.1   ~6d
+  eslint                            dev     ~5mo    7.16.0  →   7.26.0   ~2d
+  eslint-plugin-prettier            dev     ~5mo     3.3.0  →    3.4.0  ~25d
+  prettier                          dev     ~5mo     2.2.1  →    2.3.0   ⩽1d
+  ts-jest                           dev     ~6mo    26.4.4  →   26.5.6   ~5d
+  typescript                        dev     ~5mo     4.1.3  →    4.2.4  ~1mo
+  @types/jest                       dev     ~4mo   26.0.20  →  26.0.23  ~14d
+  @types/node-fetch                 dev     ~4mo     2.5.8  →   2.5.10  ~1mo
+```
+
 ## [0.6.4] - 2021-05-03
 
 - `sendTwoFAVerificationCode` can now be used with identity types `EMAIL` and `PHONE` rather than throwing an `invalid identity type` with `EMAIL`.
