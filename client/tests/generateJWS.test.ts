@@ -1,6 +1,7 @@
 import { decodeJWTPart } from "../src/utils/decodeJWTPart";
 import { defaultPayload } from "../src/utils/defaultObjects";
 import { generateHS256JWS, generateRS256JWS } from "../src/utils/generateJWS";
+import { generateRSAKeyPair } from "../src/utils/generateRSAKeyPair";
 
 describe("generateJWS", () => {
   const exp = Date.now() - 3600;
@@ -73,9 +74,11 @@ describe("generateJWS", () => {
     test("should generate a RS256 signed JWS when passing a custom payload and custom privateKey", () => {
       expect.assertions(2);
 
+      const { privateKey } = generateRSAKeyPair();
+
       const RS256JWS = generateRS256JWS(
         { ...defaultPayload, ...customPayload },
-        process.env.PEM_RSA_PRIVATE_KEY_1,
+        privateKey,
       );
 
       const [JWA, payload] = RS256JWS.split(".");

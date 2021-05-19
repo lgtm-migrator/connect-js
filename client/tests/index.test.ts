@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import fetch from "jest-fetch-mock";
 import { enableFetchMocks } from "jest-fetch-mock";
 import jwt, { JsonWebTokenError } from "jsonwebtoken";
@@ -17,6 +16,7 @@ import OAuth2Client, {
 } from "../index";
 import { generateJWE } from "../src/utils/generateJWE";
 import { generateRS256JWS } from "../src/utils/generateJWS";
+import { generateRSAKeyPair } from "../src/utils/generateRSAKeyPair";
 
 enableFetchMocks();
 
@@ -183,7 +183,7 @@ describe("OAuth2Client", () => {
   describe("verifyJWT", () => {
     const HS256JWT = generateHS256JWS();
 
-    test("is should throw an error if wrong audience", async () => {
+    test("it should throw an error if wrong audience", async () => {
       expect.assertions(2);
 
       fetch
@@ -264,7 +264,7 @@ describe("OAuth2Client", () => {
         audience: "connect-account",
       });
 
-      test("It should return a decoded jwt if valid", async () => {
+      test("it should return a decoded jwt if valid", async () => {
         expect.assertions(2);
 
         const mockedDecodedJWT = {
@@ -285,7 +285,7 @@ describe("OAuth2Client", () => {
         expect(decodedJWT).toEqual(expect.objectContaining(mockedDecodedJWT));
       });
 
-      test("should throw an error if invalid key id", async () => {
+      test("it should throw an error if invalid key id", async () => {
         expect.assertions(2);
 
         const wrongKidJWKS = {
@@ -318,7 +318,7 @@ describe("OAuth2Client", () => {
         });
       });
 
-      test("should refetch and get the new JWKS if first fetch fails", async () => {
+      test("it should refetch and get the new JWKS if first fetch fails", async () => {
         expect.assertions(2);
 
         const mockedDecodedJWT = {
@@ -356,23 +356,11 @@ describe("OAuth2Client", () => {
         expect(decodedJWT).toEqual(expect.objectContaining(mockedDecodedJWT));
       });
 
-      test("should throw an error if missing key id", async () => {
+      test("it should throw an error if missing key id", async () => {
         expect.assertions(2);
 
         const passphrase = "top secret";
-        const { privateKey } = crypto.generateKeyPairSync("rsa", {
-          modulusLength: 2048,
-          publicKeyEncoding: {
-            type: "spki",
-            format: "pem",
-          },
-          privateKeyEncoding: {
-            type: "pkcs8",
-            format: "pem",
-            cipher: "aes-256-cbc",
-            passphrase,
-          },
-        });
+        const { privateKey } = generateRSAKeyPair();
 
         fetch
           .once(JSON.stringify(mockedOpenIdConf))
@@ -419,35 +407,12 @@ describe("OAuth2Client", () => {
 
       const oauthClient = new OAuth2Client(oauthClientConstructorProps);
 
-      const { privateKey: privateKeyForSignature } = crypto.generateKeyPairSync(
-        "rsa",
-        {
-          modulusLength: 2048,
-          publicKeyEncoding: {
-            type: "spki",
-            format: "pem",
-          },
-          privateKeyEncoding: {
-            type: "pkcs8",
-            format: "pem",
-          },
-        },
-      );
+      const { privateKey: privateKeyForSignature } = generateRSAKeyPair();
 
       const {
         publicKey: publicKeyForEncryption,
         privateKey: privateKeyForEncryption,
-      } = crypto.generateKeyPairSync("rsa", {
-        modulusLength: 2048,
-        publicKeyEncoding: {
-          type: "spki",
-          format: "pem",
-        },
-        privateKeyEncoding: {
-          type: "pkcs8",
-          format: "pem",
-        },
-      });
+      } = generateRSAKeyPair();
 
       const mockedSignedJWT = generateRS256JWS(
         defaultPayload,
@@ -477,17 +442,7 @@ describe("OAuth2Client", () => {
       const {
         publicKey: publicKeyForEncryption,
         privateKey: privateKeyForEncryption,
-      } = crypto.generateKeyPairSync("rsa", {
-        modulusLength: 2048,
-        publicKeyEncoding: {
-          type: "spki",
-          format: "pem",
-        },
-        privateKeyEncoding: {
-          type: "pkcs8",
-          format: "pem",
-        },
-      });
+      } = generateRSAKeyPair();
 
       const mockedJWEWithJWTPayload = await generateJWE(
         defaultPayload,
