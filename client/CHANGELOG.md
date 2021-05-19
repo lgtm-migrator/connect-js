@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2021-05-19
+
+- Added new util function to generate RSA key pair in PEM format (`generateRSAKeyPair`).
+
 ## [0.4.6] - 2021-05-05
 
 - Added the export of `generateJWE`. This was missing in the `0.4.4` version.

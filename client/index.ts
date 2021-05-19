@@ -28,6 +28,7 @@ import {
 } from "./src/utils/defaultObjects";
 import { generateJWE } from "./src/utils/generateJWE";
 import { generateHS256JWS, generateRS256JWS } from "./src/utils/generateJWS";
+import { generateRSAKeyPair } from "./src/utils/generateRSAKeyPair";
 import { rsaPublicKeyToPEM } from "./src/utils/rsaPublicKeyToPEM";
 
 class OAuth2Client {
@@ -362,4 +363,5 @@ export {
   defaultPayload,
   defaultAsymmetricAlgoKeyPair,
   defaultSecret,
+  generateRSAKeyPair,
 };

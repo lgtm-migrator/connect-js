@@ -279,6 +279,23 @@ const { e, n } = key;
 const publicKey = rsaPublicKeyToPEM(n, e);
 ```
 
+### generateRSAKeyPair
+
+This function will generate and return a RSA public and private key pair in PEM format.
+
+```typescript
+import { generateRSAKeyPair } from "@fewlines/connect-client";
+
+const { publicKey, privateKey } = generateRSAKeyPair();
+```
+
+> Note that we can also run this command in your terminal to generate a RSA public/private key pair in PEM format :
+
+```bash
+openssl genrsa -out private.pem 2048
+openssl rsa -in private.pem -outform PEM -pubout -out public.pem
+```
+
 ## Exceptions
 
 Here is an overview of the exceptions raised from the library:
