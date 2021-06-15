@@ -1,0 +1,38 @@
+version: 2
+updates: 
+- package-ecosystem: "npm"
+  directory: "/client"
+  schedule:
+    interval: "daily"
+    time: "10:00"
+    timezone: "Europe/Paris"
+  open-pull-requests-limit: 10
+  reviewers:
+  - "Fuzznimp"
+  - "Meyclem"
+  - "Oluane"
+
+- package-ecosystem: "npm"
+  directory: "/management"
+  schedule:
+    interval: "daily"
+    time: "10:00"
+    timezone: "Europe/Paris"
+  open-pull-requests-limit: 10
+  reviewers:
+  - "Fuzznimp"
+  - "Meyclem"
+  - "Oluane"
+
+- package-ecosystem: "npm"
+  directory: "/popup"
+  schedule:
+    interval: "daily"
+    time: "10:00"
+    timezone: "Europe/Paris"
+  open-pull-requests-limit: 10
+  reviewers:
+  - "Fuzznimp"
+  - "Meyclem"
+  - "Oluane"
+  
