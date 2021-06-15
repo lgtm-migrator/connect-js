@@ -3,6 +3,7 @@ import { JWTPayload } from "../types";
 const defaultPayload: JWTPayload = {
   aud: ["oauth2"],
   exp: Date.now() + 3600,
+  iat: Date.now(),
   iss: "https://fwl.test",
   scope: "email",
   sub: "2a14bdd2-3628-4912-a76e-fd514b5c27a8",

@@ -47,11 +47,13 @@ type OAuth2Tokens = {
 };
 
 type JWTPayload = {
+  [key: string]: unknown;
   aud: string | string[];
   exp: number;
   iss: string;
   scope: string;
   sub: string;
+  iat?: number;
 };
 
 type RefreshTokenResponse = {
