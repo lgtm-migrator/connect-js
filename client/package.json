@@ -30,7 +30,7 @@
     "@fewlines/eslint-config": "3.1.2",
     "@types/jest": "26.0.23",
     "@types/jsonwebtoken": "8.5.2",
-    "@types/node": "15.12.2",
+    "@types/node": "15.12.4",
     "@types/node-fetch": "2.5.10",
     "@types/node-jose": "1.1.6",
     "@typescript-eslint/eslint-plugin": "4.27.0",
