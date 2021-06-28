@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.6] - 2021-06-28
+
+- Fixed an issue with `updateIdentityFromUser`.
+
 ## [0.6.5] - 2021-05-10
 
 - Bumped dependencies.

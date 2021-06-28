@@ -56,7 +56,9 @@ async function updateIdentityFromUser(
       identityValue: identityToUpdate.value,
     };
 
-    await markIdentityAsPrimary(managementCredentials, identityToUpdateId);
+    if (identityToUpdate.primary) {
+      await markIdentityAsPrimary(managementCredentials, identityToUpdateId);
+    }
 
     await removeIdentityFromUser(managementCredentials, identity);
 
