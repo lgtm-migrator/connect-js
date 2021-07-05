@@ -877,10 +877,10 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node-jose@1.1.6":
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/@types/node-jose/-/node-jose-1.1.6.tgz#b8d5bb9acb18177b501b347d9743f676e8a4d234"
-  integrity sha512-iAr2hvnqg7ZktBjdbeT1yhXzIZcwp6C564mEsnr45ty+wE2AeSxIlNM9rGhhtQDdOWl6Kg3IbadgzA9/VWwnXw==
+"@types/node-jose@1.1.7":
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/@types/node-jose/-/node-jose-1.1.7.tgz#2d741da555ec28cf6f15a1716a4ce18ecf0d498d"
+  integrity sha512-nQi3IY1jghCL8KsbvDa+g/TNdfAyxQqOORJqDRaPJjHsGOWRNL86zUAeWJZpQj2WzvVyKYVibo/Qczc6F8eS5g==
   dependencies:
     "@types/node" "*"
 
