@@ -53,7 +53,7 @@ async function updateIdentityFromUser(
     const identity = {
       userId,
       identityType: getIdentityType(identityToUpdate.type),
-      identityValue: identityToUpdate.value,
+      identityValue,
     };
 
     if (identityToUpdate.primary) {

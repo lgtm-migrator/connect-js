@@ -4,8 +4,9 @@ import { HttpLink } from "apollo-link-http";
 import fetch from "cross-fetch";
 import { FetchError } from "node-fetch";
 
-import { ConnectUnreachableError } from "./errors";
-import { ManagementCredentials } from "./types";
+import { ConnectUnreachableError } from "../errors";
+import { ManagementCredentials } from "../types";
+import { contextSetter } from "./config";
 
 async function fetchManagement<T = unknown>(
   managementCredentials: ManagementCredentials,
@@ -16,14 +17,8 @@ async function fetchManagement<T = unknown>(
     fetch,
   });
 
-  const authLink = setContext((_, { headers }) => {
-    return {
-      headers: {
-        ...headers,
-        authorization: `API_KEY ${managementCredentials.APIKey}`,
-      },
-    };
-  });
+  const authLink = setContext(contextSetter(managementCredentials));
+
   try {
     return (await makePromise(
       execute(authLink.concat(httpLink), operation),
