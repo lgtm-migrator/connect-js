@@ -1,0 +1,73 @@
+version: 2.1
+
+jobs:
+  select-jobs-to-run:
+    docker:
+      - image: cimg/node:14.17.0
+    steps: 
+      - checkout
+      - run: git diff --no-commit-id --name-only -r `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f1 | sort -u > manifest.txt
+      - run: cat manifest.txt
+      - persist_to_workspace:
+          root: ./
+          paths: 
+            - manifest.txt
+
+  lint-and-tests:
+    parameters:
+      package: 
+        type: string
+    working_directory: ~/project/<< parameters.package >>
+    docker:
+      - image: cimg/node:14.17.0
+    steps:
+      - checkout:
+          path: ~/project
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: 
+          name: Check if the job need to be run
+          command: |
+            manifestPath=/tmp/workspace/manifest.txt
+            if ! grep -q --extended-regexp "^<< parameters.package >>\$" ${manifestPath}
+            then
+              circleci-agent step halt
+            fi
+      - restore_cache:
+          keys:
+            - yarn-packages-<< parameters.package >>
+      - run: yarn install
+      - save_cache:
+          key: yarn-packages-<< parameters.package >>
+          paths:
+            - ./node_modules
+      - run:
+          name: Run lint
+          command: yarn lint
+      - unless: 
+          condition:
+            equal: ["popup", << parameters.package >>]
+          steps: 
+            - run: 
+                name: Run tests
+                command: yarn test
+
+workflows:
+  lint-and-tests: 
+    jobs:
+      - select-jobs-to-run
+      - lint-and-tests:
+          name: client-lint-and-tests
+          package: client
+          requires: 
+            - select-jobs-to-run
+      - lint-and-tests:
+          name: management-lint-and-tests
+          package: management
+          requires: 
+            - select-jobs-to-run
+      - lint-and-tests:
+          name: popup-lint
+          package: popup
+          requires: 
+            - select-jobs-to-run
