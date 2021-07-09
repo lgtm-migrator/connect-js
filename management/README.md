@@ -35,7 +35,6 @@ const managementCredentials: ManagementCredentials = {
 ```ts
 enum IdentityTypes {
   APPLE = "APPLE",
-  DECATHLON = "DECATHLON",
   EMAIL = "EMAIL",
   FACEBOOK = "FACEBOOK",
   GITHUB = "GITHUB",

@@ -26,7 +26,6 @@ type CreateUserWithIdentitiesInput = {
 
 enum IdentityTypes {
   APPLE = "APPLE",
-  DECATHLON = "DECATHLON",
   EMAIL = "EMAIL",
   FACEBOOK = "FACEBOOK",
   GITHUB = "GITHUB",
