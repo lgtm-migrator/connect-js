@@ -9,6 +9,8 @@ import {
 
 const updateIdentityRouter = express.Router();
 
+let COUNTER = 0;
+
 updateIdentityRouter.post("/", (request, response) => {
   const { variables, operationName } = request.body;
   const { headers } = request;
@@ -121,6 +123,16 @@ updateIdentityRouter.post("/", (request, response) => {
             },
           },
         });
+      } else if (variables.value === nonPrimaryNewIdentity.value) {
+        return response.status(200).json({
+          data: {
+            removeIdentityFromUser: {
+              identity: {
+                value: nonPrimaryNewIdentity.value,
+              },
+            },
+          },
+        });
       } else {
         return response.status(500).json("Something's wrong");
       }
@@ -133,6 +145,24 @@ updateIdentityRouter.post("/", (request, response) => {
           data: {},
           errors: [{ message: "Internal server error" }],
         });
+      } else if (
+        headers.behaviour === "retry" &&
+        headers["targeted-failure"] === "mark"
+      ) {
+        if (COUNTER < Number(headers["max-retry"])) {
+          COUNTER = COUNTER + 1;
+          return response.status(500).json("Internal server error");
+        } else {
+          COUNTER = 0;
+          return response.status(200).json({
+            data: {
+              markIdentityAsPrimary: {
+                ...primaryNewIdentity,
+                primary: true,
+              },
+            },
+          });
+        }
       } else if (variables.identityId === primaryNewIdentity.id) {
         return response.status(200).json({
           data: {

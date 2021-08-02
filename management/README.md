@@ -403,6 +403,7 @@ Used to update an Identity. Here are the props needed, in order:
 - validationCode: Code input from the User during the Identity validation flow.
 - identityValue: Identity value that will replace the current Identity.
 - identityToUpdateId: ID of the previous Identity to update.
+- maxRetry: optional number argument, set by default to `2`. It determines the max number of retries the function will do if a server exception is raised during the flow. You can pass `0` to disable the retry feature.
 
 ```ts
 import { updateIdentity } from "@fewlines/connect-management";
@@ -417,7 +418,7 @@ await updateIdentityFromUser(
 );
 ```
 
-The function will do a rollback of any added Identity and primary Identity status in case of a failure. It also allows the use of multiple event IDs.
+The function will do a rollback of any added Identity and primary Identity status in case of a failure. It also allows the use of multiple event IDs. The function will also perform a number of retry if an exception occurs during the call (triggered only on exceptions corresponding to server errors). The number of retries is determined by the `maxRetry` argument passed to the function (with a default value set at `2`). Each retry call will happen after a short increasing delay, with a maximum of 1000ms.
 
 Here are the expected exception raised in case of a failure:
 

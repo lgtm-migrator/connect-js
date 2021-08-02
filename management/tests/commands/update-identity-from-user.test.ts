@@ -32,6 +32,9 @@ describe("Update identity from user", () => {
       }/update-identity`,
       APIKey: "APIKey",
     };
+
+    jest.setTimeout(10000);
+    jest.useRealTimers();
   });
 
   afterEach(() => {
@@ -384,5 +387,128 @@ describe("Update identity from user", () => {
         },
       );
     }
+  });
+
+  test("should retry 2 times when marking the new identity fails with server error", async () => {
+    expect.assertions(9);
+
+    const maxRetry = 2;
+
+    jest
+      .spyOn(fetchManagementConfig, "contextSetter")
+      .mockImplementation((managementCredentials: ManagementCredentials) => {
+        return (_, { headers }) => {
+          return {
+            headers: {
+              ...headers,
+              behaviour: "retry",
+              "targeted-failure": "mark",
+              "max-retry": maxRetry,
+              authorization: `API_KEY ${managementCredentials.APIKey}`,
+            },
+          };
+        };
+      });
+
+    await updateIdentityFromUser(
+      mockedUpdateIdentityManagementCredentials,
+      "f3acadc9-4491-44c4-bd78-077a166751af",
+      "424242",
+      ["primaryEventId"],
+      primaryNewIdentity.value,
+      primaryIdentityToUpdate.id,
+    );
+
+    expect(spiedOnGetIdentity).toHaveBeenCalledTimes(maxRetry + 1);
+    expect(spiedOnAddIdentityToUser).toHaveBeenCalledTimes(maxRetry + 1);
+    expect(spiedOnCheckVerificationCode).toHaveBeenCalledTimes(maxRetry + 1);
+
+    expect(spiedOnMarkIdentityAsPrimary).toHaveBeenNthCalledWith(
+      1,
+      mockedUpdateIdentityManagementCredentials,
+      primaryNewIdentity.id,
+    );
+    expect(spiedOnMarkIdentityAsPrimary).toHaveBeenNthCalledWith(
+      2,
+      mockedUpdateIdentityManagementCredentials,
+      primaryNewIdentity.id,
+    );
+    expect(spiedOnMarkIdentityAsPrimary).toHaveBeenNthCalledWith(
+      3,
+      mockedUpdateIdentityManagementCredentials,
+      primaryNewIdentity.id,
+    );
+
+    expect(spiedOnRemoveIdentityFromUser).toHaveBeenNthCalledWith(
+      1,
+      mockedUpdateIdentityManagementCredentials,
+      {
+        identityType: primaryNewIdentity.type,
+        identityValue: primaryNewIdentity.value,
+        userId: "f3acadc9-4491-44c4-bd78-077a166751af",
+      },
+    );
+    expect(spiedOnRemoveIdentityFromUser).toHaveBeenNthCalledWith(
+      2,
+      mockedUpdateIdentityManagementCredentials,
+      {
+        identityType: primaryNewIdentity.type,
+        identityValue: primaryNewIdentity.value,
+        userId: "f3acadc9-4491-44c4-bd78-077a166751af",
+      },
+    );
+    expect(spiedOnRemoveIdentityFromUser).toHaveBeenNthCalledWith(
+      3,
+      mockedUpdateIdentityManagementCredentials,
+      {
+        identityType: primaryIdentityToUpdate.type,
+        identityValue: primaryIdentityToUpdate.value,
+        userId: "f3acadc9-4491-44c4-bd78-077a166751af",
+      },
+    );
+  });
+
+  test("should do 3 retries calls with an increasing delay between calls", async () => {
+    expect.assertions(1);
+    const maxRetry = 3;
+
+    const overallDelay = (): number => {
+      let result = 0;
+      for (let i = 1; i <= maxRetry; i++) {
+        result = result + Math.pow(i, 2) * 100;
+      }
+      return result;
+    };
+
+    jest
+      .spyOn(fetchManagementConfig, "contextSetter")
+      .mockImplementation((managementCredentials: ManagementCredentials) => {
+        return (_, { headers }) => {
+          return {
+            headers: {
+              ...headers,
+              behaviour: "retry",
+              "targeted-failure": "mark",
+              "max-retry": maxRetry,
+              authorization: `API_KEY ${managementCredentials.APIKey}`,
+            },
+          };
+        };
+      });
+
+    const startTime = Date.now();
+
+    await updateIdentityFromUser(
+      mockedUpdateIdentityManagementCredentials,
+      "f3acadc9-4491-44c4-bd78-077a166751af",
+      "424242",
+      ["primaryEventId"],
+      primaryNewIdentity.value,
+      primaryIdentityToUpdate.id,
+      3,
+    ).then(() => {
+      const endTime = Date.now();
+      expect(endTime - startTime).toBeGreaterThan(overallDelay());
+    });
   });
 });
