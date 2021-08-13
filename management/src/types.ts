@@ -133,6 +133,11 @@ type SendTwoFAVerificationCodeResult = {
   nonce: string;
 };
 
+type GetPrimaryIdentitiesResult = Record<
+  IdentityTypes,
+  Record<string, Omit<Identity, "type">>
+>;
+
 export type {
   ManagementCredentials,
   ProviderApplication,
@@ -149,6 +154,7 @@ export type {
   CheckVerificationCodeResult,
   SendTwoFAVerificationCodeResult,
   SendTwoFAVerificationCodeInput,
+  GetPrimaryIdentitiesResult,
 };
 
 export { IdentityTypes, IdentityStatus, CheckVerificationCodeStatus };

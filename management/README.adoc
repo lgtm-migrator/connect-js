@@ -121,22 +121,6 @@ const { id, defaultHomePage, redirectUris, name, description } =
 
 '''
 
-=== `getIdentities`
-
-Used to retrieve all the Identities for a particular user. The function returns a list of Identity. Refer to the [Identity section](#Identities) to understand the returned data structure.
-
-[source, typescript]
-----
-import { getIdentities } from "@fewlines/connect-management";
-
-const identities = await getIdentities(
-  managementCredentials,
-  "d96ee314-31b2-4e19-88b7-63734b90d1d4",
-);
-----
-
-'''
-
 === `getIdentity`
 
 Used to retrieve an Identity for a particular user using both the user and the Identity `id`. Refer to the [Identity section](#Identities) to understand the returned data structure.
@@ -154,6 +138,53 @@ const { id, primary, status, type, value } = await getIdentity(
   managementCredentials,
   input,
 );
+----
+
+'''
+
+=== `getIdentities`
+
+Used to retrieve all the Identities for a particular user. The function returns a list of Identity. Refer to the [Identity section](#Identities) to understand the returned data structure.
+
+[source, typescript]
+----
+import { getIdentities } from "@fewlines/connect-management";
+
+const identities = await getIdentities(
+  managementCredentials,
+  "d96ee314-31b2-4e19-88b7-63734b90d1d4",
+);
+----
+
+'''
+
+=== `getPrimaryIdentities`
+
+Used to retrieve all the Primary Identities for a particular user. The function returns an hash.
+
+[source, typescript]
+----
+import { getPrimaryIdentities } from "@fewlines/connect-management";
+
+const identities = await getPrimaryIdentities(
+  managementCredentials,
+  "d96ee314-31b2-4e19-88b7-63734b90d1d4",
+);
+
+/**
+  identities = {
+    email: {
+      id: "15cd592b-e07c-4743-8d80-c642b88c1930",
+      value: "foo@fewlines.co",
+      status: "verified",
+    },
+    phone: {
+      id: "e2551e49-dc2e-4127-8462-93847fe20fae",
+      value: "0123456789",
+      status: "verified",
+    },
+  }
+*/
 ----
 
 '''
