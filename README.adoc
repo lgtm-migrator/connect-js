@@ -1,3 +1,8 @@
 # Connect-JS
 
-This is the repository for Connect JavaScript packages.
+Welcome to `connect-js`.
+You will find here a collection of libraries that will help you interact with Connect.
+
+- https://github.com/fewlinesco/connect-js/tree/main/client[client]
+- https://github.com/fewlinesco/connect-js/tree/main/management[management]
+- https://github.com/fewlinesco/connect-js/tree/main/popup[popup]
