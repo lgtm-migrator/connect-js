@@ -134,7 +134,7 @@ type SendTwoFAVerificationCodeResult = {
 };
 
 type GetPrimaryIdentitiesResult = Record<
-  IdentityTypes,
+  "email" | "phone" | undefined,
   Record<string, Omit<Identity, "type">>
 >;
 
