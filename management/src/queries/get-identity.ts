@@ -6,7 +6,7 @@ import {
   OutputDataNullError,
 } from "../errors";
 import { fetchManagement } from "../fetch-management";
-import { Identity, ManagementCredentials } from "../types";
+import { GetIdentityInput, Identity, ManagementCredentials } from "../types";
 
 const GET_USER_IDENTITY_QUERY = gql`
   query getUserIdentityQuery($userId: String!, $id: String!) {
@@ -23,11 +23,6 @@ const GET_USER_IDENTITY_QUERY = gql`
     }
   }
 `;
-
-type GetIdentityInput = {
-  userId: string;
-  identityId: string;
-};
 
 async function getIdentity(
   managementCredentials: ManagementCredentials,

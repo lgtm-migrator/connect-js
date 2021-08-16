@@ -133,10 +133,10 @@ type SendTwoFAVerificationCodeResult = {
   nonce: string;
 };
 
-type GetPrimaryIdentitiesResult = Record<
-  "email" | "phone" | undefined,
-  Record<string, Omit<Identity, "type">>
->;
+type GetIdentityInput = {
+  userId: string;
+  identityId: string;
+};
 
 export type {
   ManagementCredentials,
@@ -154,7 +154,7 @@ export type {
   CheckVerificationCodeResult,
   SendTwoFAVerificationCodeResult,
   SendTwoFAVerificationCodeInput,
-  GetPrimaryIdentitiesResult,
+  GetIdentityInput,
 };
 
 export { IdentityTypes, IdentityStatus, CheckVerificationCodeStatus };
