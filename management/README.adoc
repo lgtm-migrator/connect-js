@@ -1,20 +1,23 @@
-# Fewlines Connect-js Management
+= Fewlines Connect-js Management
+:toc: preamble
 
 **Management** is part of the **Fewlines Connect-js SDK**.
 
 It provides a list of functions to handle all the user data flows related to Connect, and some useful tools regarding Provider Applications.
 
-## Installation
+== Installation
 
-```shell
+[source, shell]
+----
 yarn add @fewlines/connect-management
-```
+----
 
-## Usage
+== Usage
 
 Apart from the arguments specific to the query/command needed to fetch **Connect**, you will need to pass your **Management** credentials each time, in the form of an object, called `ManagementCredentials`.
 
-```ts
+[source, typescript]
+----
 type ManagementCredentials = {
   URI: string;
   APIKey: string;
@@ -24,15 +27,16 @@ const managementCredentials: ManagementCredentials = {
   URI: "URI",
   APIKey: "APIKey";
 }
-```
+----
 
-## Important types
+== Important types
 
-### Identities
+=== Identities
 
 **Identities** are one of the building blocks of **Connect-js Management**.
 
-```ts
+[source, typescript]
+----
 enum IdentityTypes {
   APPLE = "APPLE",
   EMAIL = "EMAIL",
@@ -57,13 +61,14 @@ type Identity = {
   type: IdentityTypes;
   value: string;
 };
-```
+----
 
-### Provider Application
+=== Provider Application
 
 **Provider Applications** are the entities between the **Connect Provider** and your web application.
 
-```ts
+[source, typescript]
+----
 type ProviderApplication = {
   id: string;
   name: string;
@@ -71,11 +76,11 @@ type ProviderApplication = {
   defaultHomePage: string;
   redirectUris: string[];
 };
-```
+----
 
-## Queries
+== Queries
 
-### checkVerificationCode
+=== `checkVerificationCode`
 
 Used to verify the verification code input by the user. The function returns an object, composed of:
 
@@ -84,7 +89,8 @@ Used to verify the verification code input by the user. The function returns an 
 - The status of the Identity
 - The nonce
 
-```ts
+[source, typescript]
+----
 import { checkVerificationCode } from "@fewlines/connect-management";
 
 const input = {
@@ -94,13 +100,16 @@ const input = {
 
 const { identityType, identityValue, nonce, status } =
   await checkVerificationCode(managementCredentials, input);
-```
+----
 
-### getProviderApplication
+'''
+
+=== `getProviderApplication`
 
 Used to get the information from the Connect Application. The function returns the Application data. Refer to the [Provider Application](#Provider) to understand the returned data structure.
 
-```ts
+[source, typescript]
+----
 import { getProviderApplication } from "@fewlines/connect-management";
 
 const { id, defaultHomePage, redirectUris, name, description } =
@@ -108,26 +117,16 @@ const { id, defaultHomePage, redirectUris, name, description } =
     managementCredentials,
     "a3e64872-6326-4813-948d-db8d8fc81bc8",
   );
-```
+----
 
-### getIdentities
+'''
 
-Used to retrieve all the Identities for a particular user. The function returns a list of Identity. Refer to the [Identity section](#Identities) to understand the returned data structure.
-
-```ts
-import { getIdentities } from "@fewlines/connect-management";
-
-const identities = await getIdentities(
-  managementCredentials,
-  "d96ee314-31b2-4e19-88b7-63734b90d1d4",
-);
-```
-
-### getIdentity
+=== `getIdentity`
 
 Used to retrieve an Identity for a particular user using both the user and the Identity `id`. Refer to the [Identity section](#Identities) to understand the returned data structure.
 
-```ts
+[source, typescript]
+----
 import { getIdentity } from "@fewlines/connect-management";
 
 const input = {
@@ -139,51 +138,77 @@ const { id, primary, status, type, value } = await getIdentity(
   managementCredentials,
   input,
 );
-```
+----
 
-### getProviderName
+'''
+
+=== `getIdentities`
+
+Used to retrieve all the Identities for a particular user. The function returns a list of Identity. Refer to the [Identity section](#Identities) to understand the returned data structure.
+
+[source, typescript]
+----
+import { getIdentities } from "@fewlines/connect-management";
+
+const identities = await getIdentities(
+  managementCredentials,
+  "d96ee314-31b2-4e19-88b7-63734b90d1d4",
+);
+----
+
+'''
+
+=== `getProviderName`
 
 Used to retrieve the name of the current Provider.
 
-```ts
+[source, typescript]
+----
 import { getProviderName } from "@fewlines/connect-management";
 
 const providerName = await getProviderName(managementCredentials);
-```
+----
 
-### getUserIdFromIdentityValue
+'''
+
+=== `getUserIdFromIdentityValue`
 
 Used to retrieve the user `id` by passing an Identity value as input.
 
-```ts
+[source, typescript]
+----
 import { getUserIdFromIdentityValue } from "@fewlines/connect-management";
 
 const userID = await getUserIdFromIdentityValue(
   managementCredentials,
   "foo@fewlines.co",
 );
-```
+----
 
-### isUserPasswordSet
+'''
+
+=== `isUserPasswordSet`
 
 Used to check if the user has already set his password. The function returns a boolean.
 
-```ts
+[source, typescript]
+----
 import { isUserPasswordSet } from "@fewlines/connect-management";
 
 const isPasswordSet = await isUserPasswordSet(
   managementCredentials,
   "16071981-1536-4eb2-a33e-892dc84c14a4",
 );
-```
+----
 
-## Commands
+== Commands
 
-### addIdentityToUser
+=== `addIdentityToUser`
 
 Used to add a new Identity to the user. It also allows the use of multiple event IDs. The function returns the newly added Identity.
 
-```ts
+[source, typescript]
+----
 import { addIdentityToUser } from "@fewlines/connect-management";
 
 const input = {
@@ -196,13 +221,16 @@ const input = {
 };
 
 await addIdentityToUser(managementCredentials, input);
-```
+----
 
-### createOrUpdatePassword
+'''
+
+=== `createOrUpdatePassword`
 
 Used to create or update a User password. The function returns the User `id`.
 
-```ts
+[source, typescript]
+----
 import { createOrUpdatePassword } from "@fewlines/connect-management";
 
 const input = {
@@ -214,11 +242,12 @@ const isPasswordSet = await createOrUpdatePassword(
   managementCredentials,
   input,
 );
-```
+----
 
 If the `cleartextPassword` input doesn't meet the Provider defined rules, the function will throw a specific error containing the `rules` waited for the password to be valid.
 
-```ts
+[source, typescript]
+----
 import {
   createOrUpdatePassword,
   InvalidPasswordInputError,
@@ -237,13 +266,16 @@ try {
     // ...
   }
 }
-```
+----
 
-### createUserWithIdentities
+'''
+
+=== `createUserWithIdentities`
 
 Create a new User with a list of Identities for the current Provider. The list of identities passed as input cannot be empty. The function returns the User `id`.
 
-```ts
+[source, typescript]
+----
 import { createUserWithIdentities } from "@fewlines/connect-management";
 
 const input = {
@@ -260,40 +292,49 @@ const input = {
 };
 
 const userId = await createUserWithIdentities(managementCredentials, input);
-```
+----
 
-### deleteUser
+'''
+
+=== `deleteUser`
 
 Used to delete a User. Return the string `"DISPATCHED"` to signify that the delete event has been sent to all the services.
 
-```ts
+[source, typescript]
+----
 import { deleteUser } from "@fewlines/connect-management";
 
 const deleteStatus = await deleteUser(
   managementCredentials,
   "f084749a-2e90-4891-a26f-65e08c4f4e69",
 );
-```
+----
 
-### markIdentityAsPrimary
+'''
+
+=== `markIdentityAsPrimary`
 
 Used to mark an Identity as `primary`. Will set the previous primary identity as non primary.
 The function returns the Identity. Refer to the [Identity section](#Identities) to understand the returned data structure.
 
-```ts
+[source, typescript]
+----
 import { markIdentityAsPrimary } from "@fewlines/connect-management";
 
 const newPrimaryIdentity = await markIdentityAsPrimary(
   managementCredentials,
   "504c741c-f9dd-425c-912a-03fe051b0e6e",
 );
-```
+----
 
-### removeIdentityFromUser
+'''
+
+=== `removeIdentityFromUser`
 
 Used to remove an Identity from a User. The function returns true if the removal worked.
 
-```ts
+[source, typescript]
+----
 import { removeIdentityFromUser } from "@fewlines/connect-management";
 
 const input = {
@@ -306,9 +347,11 @@ const isIdentityRemove = await removeIdentityFromUser(
   managementCredentials,
   input,
 );
-```
+----
 
-### sendIdentityValidationCode
+'''
+
+=== `sendIdentityValidationCode`
 
 Used to send an Identity Validation Code to the User. The function returns an object, composed of:
 
@@ -317,7 +360,8 @@ Used to send an Identity Validation Code to the User. The function returns an ob
 - The locale code
 - The nonce
 
-```ts
+[source, typescript]
+----
 import { sendIdentityValidationCode } from "@fewlines/connect-management";
 
 const input = {
@@ -334,11 +378,12 @@ const input = {
 
 const { callbackUrl, localeCode, eventId, nonce } =
   await sendIdentityValidationCode(managementCredentials, input);
-```
+----
 
 If the Identity `value` input is blank or is identical to an already validated Identity for the current Provider, the function will throw specific errors corresponding to each case.
 
-```ts
+[source, typescript]
+----
 import {
   sendIdentityValidationCode,
   IdentityAlreadyUsedError,
@@ -369,13 +414,16 @@ try {
     // ...
   }
 }
-```
+----
 
-### updateProviderApplication
+'''
+
+=== `updateProviderApplication`
 
 Used to update the Provider Application. The function returns the Application data. Refer to the [Provider Application](#Provider) to understand the returned data structure.
 
-```ts
+[source, typescript]
+----
 import { updateProviderApplication } from "@fewlines/connect-management";
 
 const input = {
@@ -391,9 +439,11 @@ const input = {
 
 const { id, description, redirectUris, name, defaultHomePage } =
   await updateProviderApplication(managementCredentials, input);
-```
+----
 
-### updateIdentityFromUser
+'''
+
+### `updateIdentityFromUser`
 
 Used to update an Identity. Here are the props needed, in order:
 
@@ -405,7 +455,8 @@ Used to update an Identity. Here are the props needed, in order:
 - identityToUpdateId: ID of the previous Identity to update.
 - maxRetry: optional number argument, set by default to `2`. It determines the max number of retries the function will do if a server exception is raised during the flow. You can pass `0` to disable the retry feature.
 
-```ts
+[source, typescript]
+----
 import { updateIdentity } from "@fewlines/connect-management";
 
 await updateIdentityFromUser(
@@ -416,19 +467,21 @@ await updateIdentityFromUser(
   identityValue,
   identityToUpdateId,
 );
-```
+----
 
 The function will do a rollback of any added Identity and primary Identity status in case of a failure. It also allows the use of multiple event IDs. The function will also perform a number of retry if an exception occurs during the call (triggered only on exceptions corresponding to server errors). The number of retries is determined by the `maxRetry` argument passed to the function (with a default value set at `2`). Each retry call will happen after a short increasing delay, with a maximum of 1000ms.
 
 Here are the expected exception raised in case of a failure:
 
-- ConnectUnreachableError
-- GraphqlErrors
-- IdentityNotFoundError
-- InvalidValidationCodeError
-- UnhandledIdentityType
+- `ConnectUnreachableError`
+- `GraphqlErrors`
+- `IdentityNotFoundError`
+- `InvalidValidationCodeError`
+- `UnhandledIdentityType`
 
-### sendTwoFAVerificationCode
+'''
+
+=== `sendTwoFAVerificationCode`
 
 Used to send a Verification Code to the User. The function returns an object, composed of:
 
@@ -437,7 +490,8 @@ Used to send a Verification Code to the User. The function returns an object, co
 - The locale code
 - The nonce
 
-```ts
+[source, typescript]
+----
 import { sendTwoFAVerificationCode } from "@fewlines/connect-management";
 
 const input = {
@@ -454,11 +508,12 @@ const input = {
 
 const { callbackUrl, localeCode, eventId, nonce } =
   await sendTwoFAVerificationCode(managementCredentials, input);
-```
+----
 
 If the Identity `type` isn't a valid one or if the provided Identity is not associated with the `userId`, the function will throw specific errors corresponding to each case.
 
-```ts
+[source, typescript]
+----
 import {
   sendTwoFAVerificationCode,
   InvalidIdentityTypeError,
@@ -489,4 +544,4 @@ try {
     // ...
   }
 }
-```
+----

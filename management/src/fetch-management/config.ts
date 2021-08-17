@@ -1,7 +1,8 @@
 import { ManagementCredentials } from "../types";
 
 function contextSetter(managementCredentials: ManagementCredentials) {
-  return (_, { headers }) => {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  return (_: unknown, { headers }) => {
     return {
       headers: {
         ...headers,
