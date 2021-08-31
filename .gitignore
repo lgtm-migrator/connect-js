@@ -8,6 +8,7 @@
 .cache
 .dynamodb/
 .env
+.env_vars
 .env.test
 !.env_vars.sample
 .eslintcache

@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## Bumps dev dependancies - 2021-08-31
+
+```sh
+  @types/jest                       dev     ~5mo   26.0.22  →  27.0.1  ~19d
+  @types/node                       dev     ~5mo  14.14.37  →  16.7.8   ⩽1d
+  eslint-plugin-prettier            dev     ~8mo     3.3.1  →   4.0.0   ⩽1d
+  jest                              dev    ~10mo    26.6.3  →  27.1.0   ~4d
+  ts-jest                           dev     ~6mo    26.5.4  →  27.0.5  ~14d
+  ts-node                           dev     ~9mo     9.1.1  →  10.2.1  ~13d
+  @typescript-eslint/eslint-plugin  dev     ~5mo    4.21.0  →  4.30.0   ⩽1d
+  @typescript-eslint/parser         dev     ~5mo    4.21.0  →  4.30.0   ⩽1d
+  eslint                            dev     ~5mo    7.24.0  →  7.32.0  ~1mo
+  eslint-config-prettier            dev     ~6mo     8.1.0  →   8.3.0  ~4mo
+  eslint-plugin-import              dev    ~11mo    2.22.1  →  2.24.2   ~7d
+  prettier                          dev     ~9mo     2.2.1  →   2.3.2  ~2mo
+  typescript                        dev     ~5mo     4.2.4  →   4.4.2   ~5d
+  @types/jsonwebtoken               dev     ~6mo     8.5.1  →   8.5.5  ~12d
+  @types/node-fetch                 dev     ~5mo    2.5.10  →  2.5.12  ~1mo
+  @types/node-jose                  dev    ~11mo     1.1.5  →   1.1.8  ~2mo
+```
+
 ## [0.5.1] - 2021-06-15
 
 - Updated `JWTPayload` type to allow optional claims.
