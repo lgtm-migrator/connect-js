@@ -61,7 +61,8 @@ describe("OAuth2Client", () => {
         e: "AQAB",
         kty: "RSA",
         kid: "d6512f53-9774-4a58-830c-981886c8bb43",
-        n: "y3M7JqY49JeL/ornP7ZY2QlO76akS36Rj1iKVSIlFH754NnqmtGwMrCVZzCWrc882trbGuDhml2psOmCIBjKBpnghNLBZALGNRelCqfV7Cy+EMrQvQ+UWbogT7xfPoL+VYjCZKTeXosfzMNMZFum/Vnk/vYBKilXZfQH1t4sohU=",
+        n:
+          "y3M7JqY49JeL/ornP7ZY2QlO76akS36Rj1iKVSIlFH754NnqmtGwMrCVZzCWrc882trbGuDhml2psOmCIBjKBpnghNLBZALGNRelCqfV7Cy+EMrQvQ+UWbogT7xfPoL+VYjCZKTeXosfzMNMZFum/Vnk/vYBKilXZfQH1t4sohU=",
         alg: "RS256",
       },
     ],
@@ -183,7 +184,7 @@ describe("OAuth2Client", () => {
   describe("verifyJWT", () => {
     const HS256JWT = generateHS256JWS();
 
-    test("it should throw an error if wrong audience", async () => {
+    test("it should throw an error if wrong audience in the JWT", async () => {
       expect.assertions(2);
 
       fetch
@@ -205,6 +206,21 @@ describe("OAuth2Client", () => {
         });
     });
 
+    test("it should throw an error if wrong audience in verifyJWT params", async () => {
+      expect.assertions(2);
+
+      fetch
+        .once(JSON.stringify(mockedOpenIdConf))
+        .once(JSON.stringify(mockedJWKS));
+
+      const oauthClient = new OAuth2Client(oauthClientConstructorProps);
+
+      await oauthClient.verifyJWT(HS256JWT, "HS256", "foo").catch((error) => {
+        expect(error).toBeInstanceOf(InvalidAudienceError);
+        expect(error.message).toBe("Invalid audience");
+      });
+    });
+
     describe("HS256 signed JWT", () => {
       test("it should return the JWT payload if a well formed JWT and a client secret are provided", async () => {
         expect.assertions(2);
@@ -217,6 +233,24 @@ describe("OAuth2Client", () => {
 
         const decoded = await oauthClient.verifyJWT(HS256JWT, "HS256");
 
+        expect(decoded).not.toBe(undefined);
+        expect(decoded).toEqual(expect.objectContaining(defaultPayload));
+      });
+
+      test("it should return the JWT payload if a well formed JWT and all params are OK", async () => {
+        expect.assertions(2);
+
+        fetch
+          .once(JSON.stringify(mockedOpenIdConf))
+          .once(JSON.stringify(mockedJWKS));
+
+        const oauthClient = new OAuth2Client(oauthClientConstructorProps);
+
+        const decoded = await oauthClient.verifyJWT(
+          HS256JWT,
+          "HS256",
+          "oauth2",
+        );
         expect(decoded).not.toBe(undefined);
         expect(decoded).toEqual(expect.objectContaining(defaultPayload));
       });
@@ -270,7 +304,8 @@ describe("OAuth2Client", () => {
         const mockedDecodedJWT = {
           aud: ["connect-account"],
           exp: 2524651200,
-          iss: "https://bs-provider.prod.connect.connect.aws.eu-west-2.k8s.fewlines.net",
+          iss:
+            "https://bs-provider.prod.connect.connect.aws.eu-west-2.k8s.fewlines.net",
           scope: "profile email",
           sub: "c4b1cb59-1c50-494a-87e5-32a5fe6e7caa",
         };
@@ -285,6 +320,47 @@ describe("OAuth2Client", () => {
         expect(decodedJWT).toEqual(expect.objectContaining(mockedDecodedJWT));
       });
 
+      test("it should return a decoded jwt if valid & audience param OK", async () => {
+        expect.assertions(2);
+
+        const mockedDecodedJWT = {
+          aud: ["connect-account"],
+          exp: 2524651200,
+          iss:
+            "https://bs-provider.prod.connect.connect.aws.eu-west-2.k8s.fewlines.net",
+          scope: "profile email",
+          sub: "c4b1cb59-1c50-494a-87e5-32a5fe6e7caa",
+        };
+
+        fetch
+          .once(JSON.stringify(mockedOpenIdConf))
+          .once(JSON.stringify(mockedJWKS));
+
+        const decodedJWT = await oauthClient.verifyJWT(
+          RS256JWT,
+          "RS256",
+          "connect-account",
+        );
+
+        expect(decodedJWT).not.toBe(undefined);
+        expect(decodedJWT).toEqual(expect.objectContaining(mockedDecodedJWT));
+      });
+
+      test("it should return an error if wrong audience param", async () => {
+        expect.assertions(2);
+
+        fetch
+          .once(JSON.stringify(mockedOpenIdConf))
+          .once(JSON.stringify(mockedJWKS));
+
+        await oauthClient
+          .verifyJWT(RS256JWT, "RS256", "oauth2")
+          .catch((error) => {
+            expect(error).toBeInstanceOf(InvalidAudienceError);
+            expect(error.message).toBe("Invalid audience");
+          });
+      });
+
       test("it should throw an error if invalid key id", async () => {
         expect.assertions(2);
 
@@ -294,7 +370,8 @@ describe("OAuth2Client", () => {
               e: "AQAB",
               kty: "RSA",
               kid: "wrongKid",
-              n: "y3M7JqY49JeL/ornP7ZY2QlO76akS36Rj1iKVSIlFH754NnqmtGwMrCVZzCWrc882trbGuDhml2psOmCIBjKBpnghNLBZALGNRelCqfV7Cy+EMrQvQ+UWbogT7xfPoL+VYjCZKTeXosfzMNMZFum/Vnk/vYBKilXZfQH1t4sohU=",
+              n:
+                "y3M7JqY49JeL/ornP7ZY2QlO76akS36Rj1iKVSIlFH754NnqmtGwMrCVZzCWrc882trbGuDhml2psOmCIBjKBpnghNLBZALGNRelCqfV7Cy+EMrQvQ+UWbogT7xfPoL+VYjCZKTeXosfzMNMZFum/Vnk/vYBKilXZfQH1t4sohU=",
               alg: "RS256",
             },
           ],
@@ -324,7 +401,8 @@ describe("OAuth2Client", () => {
         const mockedDecodedJWT = {
           aud: ["connect-account"],
           exp: 2524651200,
-          iss: "https://bs-provider.prod.connect.connect.aws.eu-west-2.k8s.fewlines.net",
+          iss:
+            "https://bs-provider.prod.connect.connect.aws.eu-west-2.k8s.fewlines.net",
           scope: "profile email",
           sub: "c4b1cb59-1c50-494a-87e5-32a5fe6e7caa",
         };
@@ -335,7 +413,8 @@ describe("OAuth2Client", () => {
               e: "AQAB",
               kty: "RSA",
               kid: "wrongKid",
-              n: "y3M7JqY49JeL/ornP7ZY2QlO76akS36Rj1iKVSIlFH754NnqmtGwMrCVZzCWrc882trbGuDhml2psOmCIBjKBpnghNLBZALGNRelCqfV7Cy+EMrQvQ+UWbogT7xfPoL+VYjCZKTeXosfzMNMZFum/Vnk/vYBKilXZfQH1t4sohU=",
+              n:
+                "y3M7JqY49JeL/ornP7ZY2QlO76akS36Rj1iKVSIlFH754NnqmtGwMrCVZzCWrc882trbGuDhml2psOmCIBjKBpnghNLBZALGNRelCqfV7Cy+EMrQvQ+UWbogT7xfPoL+VYjCZKTeXosfzMNMZFum/Vnk/vYBKilXZfQH1t4sohU=",
               alg: "RS256",
             },
           ],
@@ -449,12 +528,11 @@ describe("OAuth2Client", () => {
         publicKeyForEncryption,
       );
 
-      const decryptedMockedJWEAccessToken =
-        await oauthClient.decryptJWE<string>(
-          mockedJWEWithJWTPayload,
-          privateKeyForEncryption,
-          false,
-        );
+      const decryptedMockedJWEAccessToken = await oauthClient.decryptJWE<string>(
+        mockedJWEWithJWTPayload,
+        privateKeyForEncryption,
+        false,
+      );
 
       expect(decryptedMockedJWEAccessToken).toStrictEqual(defaultPayload);
     });

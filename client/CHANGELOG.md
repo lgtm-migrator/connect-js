@@ -23,6 +23,10 @@ All notable changes to this project will be documented in this file.
   @types/node-jose                  dev    ~11mo     1.1.5  →   1.1.8  ~2mo
 ```
 
+## [0.5.2] - 2021-11-15
+
+- Updated `verifyJWT` to add the optional audience parameter.
+
 ## [0.5.1] - 2021-06-15
 
 - Updated `JWTPayload` type to allow optional claims.
