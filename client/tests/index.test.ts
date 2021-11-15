@@ -351,7 +351,7 @@ describe("OAuth2Client", () => {
           .once(JSON.stringify(mockedJWKS));
 
         await oauthClient
-          .verifyJWT(RS256JWT, "RS256", "oauth2")
+          .verifyJWT(RS256JWT, "RS256", "wrong audience")
           .catch((error) => {
             expect(error).toBeInstanceOf(InvalidAudienceError);
             expect(error.message).toBe("Invalid audience");
