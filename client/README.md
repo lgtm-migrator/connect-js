@@ -77,7 +77,7 @@ const tokens = await oauthClient.getTokensFromAuthorizationCode(
 async verifyJWT<T = unknown>(accessToken: string, algo: string, audience?: string): Promise<T> {}
 ```
 
-Used to verify the JWS (i.e. `access_token`). It provides a series of checks, like audiences, algorithm or public key. The audience parameter is optional and will have a default value of the config audience.
+Used to verify the JWS (i.e. `access_token`). It provides a series of checks, like audiences, algorithm or public key. The audience parameter is optional and will default to the value you provided when creating the client.
 
 ```typescript
 const decoded = await oauthClient.verifyJWT(JWS, "RS256");
