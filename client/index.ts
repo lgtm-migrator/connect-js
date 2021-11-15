@@ -288,7 +288,7 @@ class OAuth2Client {
     const { payload } = decryptedJWEToken;
 
     if (isSigned) {
-      return (payload.toString() as unknown) as T;
+      return payload.toString() as unknown as T;
     } else {
       return JSON.parse(payload.toString()) as T;
     }

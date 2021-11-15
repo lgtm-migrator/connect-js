@@ -4,18 +4,18 @@ jobs:
   select-jobs-to-run:
     docker:
       - image: cimg/node:14.17.0
-    steps: 
+    steps:
       - checkout
       - run: git diff --no-commit-id --name-only -r `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f1 | sort -u > manifest.txt
       - run: cat manifest.txt
       - persist_to_workspace:
           root: ./
-          paths: 
+          paths:
             - manifest.txt
 
   lint-and-tests:
     parameters:
-      package: 
+      package:
         type: string
     working_directory: ~/project/<< parameters.package >>
     docker:
@@ -25,7 +25,7 @@ jobs:
           path: ~/project
       - attach_workspace:
           at: /tmp/workspace
-      - run: 
+      - run:
           name: Check if the job need to be run
           command: |
             manifestPath=/tmp/workspace/manifest.txt
@@ -44,30 +44,30 @@ jobs:
       - run:
           name: Run lint
           command: yarn lint
-      - unless: 
+      - unless:
           condition:
             equal: ["popup", << parameters.package >>]
-          steps: 
-            - run: 
+          steps:
+            - run:
                 name: Run tests
                 command: yarn test
 
 workflows:
-  lint-and-tests: 
+  lint-and-tests:
     jobs:
       - select-jobs-to-run
       - lint-and-tests:
           name: client-lint-and-tests
           package: client
-          requires: 
+          requires:
             - select-jobs-to-run
       - lint-and-tests:
           name: management-lint-and-tests
           package: management
-          requires: 
+          requires:
             - select-jobs-to-run
       - lint-and-tests:
           name: popup-lint
           package: popup
-          requires: 
+          requires:
             - select-jobs-to-run
