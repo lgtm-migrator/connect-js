@@ -238,7 +238,11 @@ class OAuth2Client {
     return tokens;
   }
 
-  async verifyJWT<T = unknown>(accessToken: string, algo: string): Promise<T> {
+  async verifyJWT<T = unknown>(
+    accessToken: string,
+    algo: string,
+    audience = this.audience,
+  ): Promise<T> {
     const [header, payload] = accessToken.split(".");
 
     const { alg, kid } = decodeJWTPart<{ alg: string; kid: string }>(header);
@@ -247,8 +251,8 @@ class OAuth2Client {
     const jwks = kid && (await this.getJWKS());
 
     if (
-      (typeof aud === "string" && aud !== this.audience) ||
-      (Array.isArray(aud) && !aud.includes(this.audience))
+      (typeof aud === "string" && aud !== audience) ||
+      (Array.isArray(aud) && !aud.includes(audience))
     ) {
       throw new InvalidAudienceError("Invalid audience");
     }
