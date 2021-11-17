@@ -6,6 +6,12 @@
   "license": "MIT",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
+  "homepage": "https://github.com/fewlinesco/connect-js/tree/main/client",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fewlinesco/connect-js.git",
+    "directory": "client"
+  },
   "files": [
     "dist/**/*"
   ],
