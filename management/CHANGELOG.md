@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.1] - 2022-05-02
+
+- Bump all dependencies
+
 ## [0.8.0] - 2021-07-27
 
 - `updateIdentityFromUser` has now a retry logic by default in case of server exception raised during the function flow, with increasing delay between the attempts.

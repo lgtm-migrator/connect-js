@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [0.5.3] - 2022-05-02
+
+- Bump all dependencies
+
 ## Bumps dev dependancies - 2021-08-31
 
 ```sh

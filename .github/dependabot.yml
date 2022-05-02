@@ -1,5 +1,5 @@
 version: 2
-updates: 
+updates:
 - package-ecosystem: "npm"
   directory: "/client"
   schedule:
@@ -8,9 +8,9 @@ updates:
     timezone: "Europe/Paris"
   open-pull-requests-limit: 10
   reviewers:
-  - "Fuzznimp"
-  - "Meyclem"
-  - "Oluane"
+  - "TheRealAstoo"
+  - "Fenntasy"
+  - "GrosboillotFlo"
 
 - package-ecosystem: "npm"
   directory: "/management"
@@ -20,9 +20,9 @@ updates:
     timezone: "Europe/Paris"
   open-pull-requests-limit: 10
   reviewers:
-  - "Fuzznimp"
-  - "Meyclem"
-  - "Oluane"
+  - "TheRealAstoo"
+  - "Fenntasy"
+  - "GrosboillotFlo"
 
 - package-ecosystem: "npm"
   directory: "/popup"
@@ -32,7 +32,6 @@ updates:
     timezone: "Europe/Paris"
   open-pull-requests-limit: 10
   reviewers:
-  - "Fuzznimp"
-  - "Meyclem"
-  - "Oluane"
-  
+  - "TheRealAstoo"
+  - "Fenntasy"
+  - "GrosboillotFlo"
