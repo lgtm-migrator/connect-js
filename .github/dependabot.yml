@@ -1,11 +1,45 @@
 version: 2
 updates:
+
+# Client
+
 - package-ecosystem: "npm"
   directory: "/client"
   schedule:
     interval: "daily"
     time: "10:00"
     timezone: "Europe/Paris"
+  allow:
+    - dependency-type: production
+  open-pull-requests-limit: 10
+  reviewers:
+  - "TheRealAstoo"
+  - "Fenntasy"
+  - "GrosboillotFlo"
+
+- package-ecosystem: "npm"
+  directory: "/client"
+  schedule:
+    interval: "monthly"
+    timezone: "Europe/Paris"
+  allow:
+    - dependency-type: development
+  open-pull-requests-limit: 10
+  reviewers:
+  - "TheRealAstoo"
+  - "Fenntasy"
+  - "GrosboillotFlo"
+
+# Management
+
+- package-ecosystem: "npm"
+  directory: "/management"
+  schedule:
+    interval: "daily"
+    time: "10:00"
+    timezone: "Europe/Paris"
+  allow:
+    - dependency-type: production
   open-pull-requests-limit: 10
   reviewers:
   - "TheRealAstoo"
@@ -15,9 +49,26 @@ updates:
 - package-ecosystem: "npm"
   directory: "/management"
   schedule:
+    interval: "monthly"
+    timezone: "Europe/Paris"
+  allow:
+    - dependency-type: development
+  open-pull-requests-limit: 10
+  reviewers:
+  - "TheRealAstoo"
+  - "Fenntasy"
+  - "GrosboillotFlo"
+
+# Popup
+
+- package-ecosystem: "npm"
+  directory: "/popup"
+  schedule:
     interval: "daily"
     time: "10:00"
     timezone: "Europe/Paris"
+  allow:
+    - dependency-type: production
   open-pull-requests-limit: 10
   reviewers:
   - "TheRealAstoo"
@@ -27,9 +78,10 @@ updates:
 - package-ecosystem: "npm"
   directory: "/popup"
   schedule:
-    interval: "daily"
-    time: "10:00"
+    interval: "monthly"
     timezone: "Europe/Paris"
+  allow:
+    - dependency-type: development
   open-pull-requests-limit: 10
   reviewers:
   - "TheRealAstoo"
